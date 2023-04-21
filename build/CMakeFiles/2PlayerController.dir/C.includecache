@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/esadev/Documents/GitHub/2PlayerController/src/Adafruit-GFX-Library-1.11.3/fontconvert/fontconvert.c
+ctype.h
+-
+ft2build.h
+-
+stdint.h
+-
+stdio.h
+-
+../gfxfont.h
+/home/esadev/Documents/GitHub/2PlayerController/src/Adafruit-GFX-Library-1.11.3/gfxfont.h
+
+/home/esadev/Documents/GitHub/2PlayerController/src/Adafruit-GFX-Library-1.11.3/gfxfont.h
+
+/home/esadev/Documents/GitHub/2PlayerController/src/Adafruit-GFX-Library-1.11.3/glcdfont.c
+avr/io.h
+-
+avr/pgmspace.h
+-
+pgmspace.h
+-
+
