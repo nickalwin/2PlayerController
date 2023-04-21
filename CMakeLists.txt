@@ -23,6 +23,7 @@ project("2PlayerController")
 # (Linux) `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
     src/main.cpp
+	src/graphicstest.cpp
     # zet hierin de bestanden om uit tevoeren
 )
 # Where to install
