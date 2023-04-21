@@ -1,7 +1,0 @@
-/home/esadev/Documents/GitHub/2PlayerController/build/CMakeFiles/install/strip.dir
-/home/esadev/Documents/GitHub/2PlayerController/build/CMakeFiles/install.dir
-/home/esadev/Documents/GitHub/2PlayerController/build/CMakeFiles/list_install_components.dir
-/home/esadev/Documents/GitHub/2PlayerController/build/CMakeFiles/rebuild_cache.dir
-/home/esadev/Documents/GitHub/2PlayerController/build/CMakeFiles/edit_cache.dir
-/home/esadev/Documents/GitHub/2PlayerController/build/CMakeFiles/install/local.dir
-/home/esadev/Documents/GitHub/2PlayerController/build/CMakeFiles/2PlayerController.dir

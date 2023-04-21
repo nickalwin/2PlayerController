@@ -4,10 +4,14 @@ cmake_minimum_required(VERSION 3.18)
 # Use AVR GCC toolchain definition in your HOME/Arduino directory
 if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
     set(ARDUINO_PATH $ENV{HOME}/Arduino)
+    set(AVR_PORT /dev/ttyACM0)
 elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
     cmake_path(CONVERT "$ENV{HOMEDRIVE}$ENV{HOMEPATH}/Arduino" TO_CMAKE_PATH_LIST ARDUINO_PATH NORMALIZE)
 endif()
 set(CMAKE_TOOLCHAIN_FILE ${ARDUINO_PATH}/etc/toolchain-avr.cmake)
+
+# include standard extra targets, like 'upload'
+set(CMAKE_PROJECT_INCLUDE ${ARDUINO_PATH}/etc/extratargets-avr.cmake)
 
 # we need the assembler this time
 enable_language(ASM)
@@ -15,6 +19,12 @@ enable_language(ASM)
 # Project name
 project("2PlayerController")
 
+# Create one target
+# (Linux) `find src -name \*.c\*`
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+    # zet hierin de bestanden om uit tevoeren
+)
 # Where to install
 set(CMAKE_INSTALL_PREFIX ${ARDUINO_PATH})
 
