@@ -6,15 +6,15 @@ if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
     set(ARDUINO_PATH $ENV{HOME}/Arduino)
     set(AVR_PORT /dev/ttyACM0)
 elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    cmake_path(CONVERT "$ENV{HOMEDRIVE}$ENV{HOMEPATH}/Arduino" TO_CMAKE_PATH_LIST ARDUINO_PATH NORMALIZE)
+    set(ARDUINO_PATH "$ENV{HOMEDRIVE}$ENV{HOMEPATH}/Arduino")
+    set(AVR_PORT COM6)
 endif()
+
+# the toolchain to use
 set(CMAKE_TOOLCHAIN_FILE ${ARDUINO_PATH}/etc/toolchain-avr.cmake)
 
 # include standard extra targets, like 'upload'
 set(CMAKE_PROJECT_INCLUDE ${ARDUINO_PATH}/etc/extratargets-avr.cmake)
-
-# we need the assembler this time
-enable_language(ASM)
 
 # Project name
 project("2PlayerController")
@@ -23,7 +23,7 @@ project("2PlayerController")
 # (Linux) `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
     src/main.cpp
-	src/graphicstest.cpp
+    src/graphicstest.cpp
     # zet hierin de bestanden om uit tevoeren
 )
 # Where to install
@@ -118,6 +118,20 @@ set(INCLUDES_FONTS
 	src/Adafruit-GFX-Library-1.11.3/Fonts/FreeSansOblique24pt7b.h
 	src/Adafruit-GFX-Library-1.11.3/Fonts/FreeSerifBoldItalic18pt7b.h
 )
+
+# Add arduino core library
+target_include_directories(${PROJECT_NAME} PRIVATE
+    "${ARDUINO_PATH}/include/arduino"
+)
+target_link_directories(${PROJECT_NAME} PRIVATE
+    "${ARDUINO_PATH}/lib"
+)
+target_link_libraries(${PROJECT_NAME}
+    ArduinoCore
+)
+
+# Rename the output to .elf as we will create multiple files
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}.elf)
 
 # Install the library here (INSTALL_PREFIX_PATH is prepended)
 install(TARGETS ${PROJECT_NAME} ARCHIVE DESTINATION lib)
