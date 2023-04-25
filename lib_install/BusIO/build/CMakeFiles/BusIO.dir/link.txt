@@ -1,0 +1,2 @@
+avr-gcc-ar qc libBusIO.a CMakeFiles/BusIO.dir/src/Adafruit_BusIO-1.14.1/Adafruit_SPIDevice.cpp.obj CMakeFiles/BusIO.dir/src/Adafruit_BusIO-1.14.1/Adafruit_I2CDevice.cpp.obj CMakeFiles/BusIO.dir/src/Adafruit_BusIO-1.14.1/Adafruit_BusIO_Register.cpp.obj
+avr-gcc-ranlib libBusIO.a

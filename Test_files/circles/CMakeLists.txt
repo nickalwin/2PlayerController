@@ -17,7 +17,7 @@ set(CMAKE_TOOLCHAIN_FILE ${ARDUINO_PATH}/etc/toolchain-avr.cmake)
 set(CMAKE_PROJECT_INCLUDE ${ARDUINO_PATH}/etc/extratargets-avr.cmake)
 
 # Project name
-project("2PlayerController")
+project("Circles")
 
 # defines: use Arduino.h i.s.o. WProgram.h
 add_compile_definitions(ARDUINO=101)
@@ -25,7 +25,7 @@ add_compile_definitions(ARDUINO=101)
 # Create one target
 # (Linux) `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
-	src/main.cpp
+	src/circle.cpp
 )
 
 # Add libraries: mind the order!
@@ -45,3 +45,4 @@ target_link_libraries(${PROJECT_NAME}
 
 # Rename the output to .elf as we will create multiple files
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}.elf)
+

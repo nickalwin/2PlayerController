@@ -1,0 +1,2 @@
+avr-gcc-ar qc libILI9341.a CMakeFiles/ILI9341.dir/src/Adafruit_ILI9341-1.5.12/Adafruit_ILI9341.cpp.obj
+avr-gcc-ranlib libILI9341.a

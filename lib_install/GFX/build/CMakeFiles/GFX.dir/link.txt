@@ -1,0 +1,2 @@
+avr-gcc-ar qc libGFX.a CMakeFiles/GFX.dir/src/Adafruit-GFX-Library-1.11.3/Adafruit_GrayOLED.cpp.obj CMakeFiles/GFX.dir/src/Adafruit-GFX-Library-1.11.3/Adafruit_SPITFT.cpp.obj CMakeFiles/GFX.dir/src/Adafruit-GFX-Library-1.11.3/fontconvert/fontconvert.c.obj CMakeFiles/GFX.dir/src/Adafruit-GFX-Library-1.11.3/Adafruit_GFX.cpp.obj CMakeFiles/GFX.dir/src/Adafruit-GFX-Library-1.11.3/glcdfont.c.obj
+avr-gcc-ranlib libGFX.a

@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/esadev/projects/MIC/ILI9341/build",
+  "command": "/usr/bin/avr-g++ -DARDUINO=101 -DBAUD=9600 -DF_CPU=16000000UL -I/home/esadev/projects/MIC/ILI9341/src/Adafruit_ILI9341-1.5.12 -I/home/esadev/Arduino/include/arduino -std=gnu++11 -fpermissive -fno-exceptions -fno-threadsafe-statics -Wno-error=narrowing -g -mmcu=atmega328p -MMD -Os -g -ffunction-sections -fdata-sections -flto -fno-fat-lto-objects -o CMakeFiles/ILI9341.dir/src/Adafruit_ILI9341-1.5.12/Adafruit_ILI9341.cpp.obj -c /home/esadev/projects/MIC/ILI9341/src/Adafruit_ILI9341-1.5.12/Adafruit_ILI9341.cpp",
+  "file": "/home/esadev/projects/MIC/ILI9341/src/Adafruit_ILI9341-1.5.12/Adafruit_ILI9341.cpp"
+}
+]
