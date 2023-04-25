@@ -1,0 +1,3 @@
+/home/esadev/Arduino/lib/libWire.a
+/home/esadev/Arduino/include/arduino/twi.h
+/home/esadev/Arduino/include/arduino/Wire.h

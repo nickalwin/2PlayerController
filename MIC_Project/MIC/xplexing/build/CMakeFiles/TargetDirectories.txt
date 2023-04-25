@@ -1,0 +1,11 @@
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/rebuild_cache.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/xplexing.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/fuses.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/upload_eeprom.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/edit_cache.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/size.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/upload.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/disasm.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/eeprom.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/hex.dir
+/home/esadev/projects/MIC/xplexing/build/CMakeFiles/strip.dir

@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/cspi.h
+
+/home/esadev/projects/MIC/CSPI/src/cspi.c
+avr/io.h
+-
+cspi.h
+-
+

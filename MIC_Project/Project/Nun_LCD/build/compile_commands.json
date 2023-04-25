@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/esadev/projects/Project/Nun_LCD/build",
+  "command": "/usr/bin/avr-g++ -DARDUINO=101 -DBAUD=9600 -DF_CPU=16000000UL -I/home/esadev/Arduino/include/arduino -std=gnu++11 -fpermissive -fno-exceptions -fno-threadsafe-statics -Wno-error=narrowing -g -mmcu=atmega328p -MMD -Os -g -ffunction-sections -fdata-sections -flto -fno-fat-lto-objects -o CMakeFiles/Nun_LCD.dir/src/nunchuk.cpp.obj -c /home/esadev/projects/Project/Nun_LCD/src/nunchuk.cpp",
+  "file": "/home/esadev/projects/Project/Nun_LCD/src/nunchuk.cpp"
+}
+]

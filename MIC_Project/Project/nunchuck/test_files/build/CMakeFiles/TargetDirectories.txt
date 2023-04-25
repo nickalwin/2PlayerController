@@ -1,0 +1,11 @@
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/rebuild_cache.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/fuses.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/upload_eeprom.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/edit_cache.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/size.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/upload.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/disasm.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/eeprom.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/hex.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/readNuchuk.dir
+/home/esadev/projects/Project/nunchuck/test_files/build/CMakeFiles/strip.dir

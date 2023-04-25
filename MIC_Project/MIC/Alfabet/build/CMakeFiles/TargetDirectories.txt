@@ -1,0 +1,11 @@
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/rebuild_cache.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/Alfabet.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/fuses.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/upload_eeprom.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/edit_cache.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/size.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/upload.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/disasm.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/eeprom.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/hex.dir
+/home/esadev/projects/MIC/Alfabet/build/CMakeFiles/strip.dir

@@ -1,0 +1,2 @@
+avr-gcc-ar qc libWire.a CMakeFiles/Wire.dir/src/libraries/SPI/src/SPI.cpp.obj
+avr-gcc-ranlib libWire.a

@@ -1,0 +1,1 @@
+/usr/bin/avr-g++ -std=gnu++11 -fpermissive -fno-exceptions -fno-threadsafe-statics -Wno-error=narrowing -mmcu=atmega328p -flto -fuse-linker-plugin -Wl,--gc-sections CMakeFiles/2PlayerController.dir/src/main.cpp.obj CMakeFiles/2PlayerController.dir/src/graphicstest.cpp.obj -o 2PlayerController.elf   -L/home/esadev/Arduino/lib  -lArduinoCore 

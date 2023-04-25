@@ -1,0 +1,21 @@
+CMakeFiles/GFX.dir/src/Adafruit-GFX-Library-1.11.3/Adafruit_SPITFT.cpp.obj: \
+ /home/esadev/projects/MIC/GFX/src/Adafruit-GFX-Library-1.11.3/Adafruit_SPITFT.cpp \
+ /home/esadev/projects/MIC/GFX/src/Adafruit-GFX-Library-1.11.3/Adafruit_SPITFT.h \
+ /home/esadev/projects/MIC/GFX/src/Adafruit-GFX-Library-1.11.3/Adafruit_GFX.h \
+ /home/esadev/Arduino/include/arduino/Arduino.h \
+ /home/esadev/Arduino/include/arduino/binary.h \
+ /home/esadev/Arduino/include/arduino/WCharacter.h \
+ /home/esadev/Arduino/include/arduino/WString.h \
+ /home/esadev/Arduino/include/arduino/HardwareSerial.h \
+ /home/esadev/Arduino/include/arduino/Stream.h \
+ /home/esadev/Arduino/include/arduino/Print.h \
+ /home/esadev/Arduino/include/arduino/Printable.h \
+ /home/esadev/Arduino/include/arduino/USBAPI.h \
+ /home/esadev/Arduino/include/arduino/Arduino.h \
+ /home/esadev/Arduino/include/arduino/pins_arduino.h \
+ /home/esadev/Arduino/include/arduino/Print.h \
+ /home/esadev/projects/MIC/GFX/src/Adafruit-GFX-Library-1.11.3/gfxfont.h \
+ /home/esadev/projects/MIC/GFX/src/Adafruit-GFX-Library-1.11.3/Adafruit_I2CDevice.h \
+ /home/esadev/Arduino/include/arduino/Wire.h \
+ /home/esadev/Arduino/include/arduino/Adafruit_SPIDevice.h \
+ /home/esadev/Arduino/include/arduino/SPI.h

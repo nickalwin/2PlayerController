@@ -1,0 +1,1 @@
+/usr/bin/avr-g++ -std=gnu++11 -fpermissive -fno-exceptions -fno-threadsafe-statics -Wno-error=narrowing -g -mmcu=atmega328p -flto -fuse-linker-plugin -Wl,--gc-sections CMakeFiles/blink.dir/src/main.cpp.obj -o blink.elf 

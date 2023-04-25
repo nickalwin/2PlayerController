@@ -1,0 +1,2 @@
+avr-gcc-ar qc libWire.a CMakeFiles/Wire.dir/src/libraries/Wire/src/utility/twi.c.obj CMakeFiles/Wire.dir/src/libraries/Wire/src/Wire.cpp.obj
+avr-gcc-ranlib libWire.a

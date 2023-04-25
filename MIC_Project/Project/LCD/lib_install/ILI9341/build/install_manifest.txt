@@ -1,0 +1,2 @@
+/home/esadev/Arduino/lib/libILI9341.a
+/home/esadev/Arduino/include/arduino/Adafruit_ILI9341.h

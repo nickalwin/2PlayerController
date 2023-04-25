@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/build",
+  "command": "/usr/bin/avr-gcc -DARDUINO=101 -DBAUD=9600 -DF_CPU=16000000UL -I/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src/utility -I/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src -I/home/esadev/Arduino/include/arduino -std=gnu11 -g -mmcu=atmega328p -MMD -Os -g -ffunction-sections -fdata-sections -flto -fno-fat-lto-objects -o CMakeFiles/Wire.dir/src/libraries/Wire/src/utility/twi.c.obj -c /home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src/utility/twi.c",
+  "file": "/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src/utility/twi.c"
+},
+{
+  "directory": "/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/build",
+  "command": "/usr/bin/avr-g++ -DARDUINO=101 -DBAUD=9600 -DF_CPU=16000000UL -I/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src/utility -I/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src -I/home/esadev/Arduino/include/arduino -std=gnu++11 -fpermissive -fno-exceptions -fno-threadsafe-statics -Wno-error=narrowing -g -mmcu=atmega328p -MMD -Os -g -ffunction-sections -fdata-sections -flto -fno-fat-lto-objects -o CMakeFiles/Wire.dir/src/libraries/Wire/src/Wire.cpp.obj -c /home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src/Wire.cpp",
+  "file": "/home/esadev/projects/Project/nunchuck/install_lib/Wirelib/src/libraries/Wire/src/Wire.cpp"
+}
+]

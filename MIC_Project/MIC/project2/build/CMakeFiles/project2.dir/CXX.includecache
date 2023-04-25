@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/esadev/projects/MIC/project2/src/main.cpp
+avr/io.h
+-
+util/delay.h
+-
+avr/interrupt.h
+-
+stdint.h
+-
+avr/io.h
+-
+

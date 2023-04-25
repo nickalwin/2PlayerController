@@ -1,0 +1,2 @@
+/home/esadev/Arduino/lib/libCSPI.a
+/home/esadev/Arduino/include/arduino/cspi.h

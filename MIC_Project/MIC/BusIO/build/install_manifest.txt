@@ -1,0 +1,5 @@
+/home/esadev/Arduino/lib/libBusIO.a
+/home/esadev/Arduino/include/arduino/Adafruit_I2CDevice.h
+/home/esadev/Arduino/include/arduino/Adafruit_I2CRegister.h
+/home/esadev/Arduino/include/arduino/Adafruit_BusIO_Register.h
+/home/esadev/Arduino/include/arduino/Adafruit_SPIDevice.h

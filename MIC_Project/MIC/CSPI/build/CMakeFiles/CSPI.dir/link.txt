@@ -1,0 +1,2 @@
+avr-gcc-ar qc libCSPI.a CMakeFiles/CSPI.dir/src/cspi.c.obj
+avr-gcc-ranlib libCSPI.a
