@@ -24,7 +24,7 @@
 		[
 			"CMakeLists.txt",
 			"/home/esadev/Arduino/etc/toolchain-avr.cmake",
-			"/usr/share/cmake-3.18/Modules/CMakeDetermineSystem.cmake"
+			"build/CMakeFiles/3.18.4/CMakeSystem.cmake"
 		],
 		"nodes" : 
 		[
@@ -50,7 +50,7 @@
 			{
 				"command" : 2,
 				"file" : 2,
-				"line" : 93,
+				"line" : 6,
 				"parent" : 3
 			},
 			{
