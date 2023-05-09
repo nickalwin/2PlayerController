@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define IR_LED_PIN 3
+#define IR_LED_PIN 6
 
 void sendIRByte(uint8_t byteToSend) {
   // Begin met het sturen van een startbit (LOW)
@@ -29,7 +29,7 @@ int main(int argc, char const *argv[])
 
 	while (1)
 	{
-		uint8_t byteToSend = 0x5A; // Hexadecimale waarde om te verzenden
+		uint8_t byteToSend = 0x14; // Hexadecimale waarde om te verzenden
 		sendIRByte(byteToSend);
 		_delay_ms(1000); // Wacht 1 seconde voordat u de volgende byte verzendt
 	}

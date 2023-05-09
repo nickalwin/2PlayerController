@@ -6,37 +6,53 @@
 #define RECV_PIN PB2   // Pinnummer aangesloten op de TSOP2238
 #define LED_PIN PD6     // Pinnummer aangesloten op de LED
 
-unsigned long irCode = 0;
-
 void setup() {
-  DDRD &= ~(1 << RECV_PIN);     // Configureer de pin als input
-  DDRD |= (1 << LED_PIN);       // Configureer de pin als output
-  PORTD &= ~(1 << LED_PIN);     // Zet de LED uit
+  DDRD &= ~(1 << RECV_PIN);  // stel de pin als input in
+
   // Configureer de seriële poort
   Serial.begin(9600);
+}
+
+void receiveIRByte(uint8_t* byteReceived) {
+  // Wacht tot de IR-ontvanger een byte ontvangt
+  while (!(PIND & (1 << IR_RECEIVER_PIN)));
+
+  // Wacht tot de startbit (LOW) is ontvangen
+  _delay_us(2000);
+
+  // Ontvang elk bit in de byte, beginnend met het meest significante bit
+  *byteReceived = 0;
+  for (int bit = 7; bit >= 0; bit--) {
+    // Wacht op de volgende bit
+    while (PIND & (1 << IR_RECEIVER_PIN));
+
+    // Wacht op de halve bitduur
+    _delay_us(500);
+
+    // Lees de bit en voeg deze toe aan de ontvangen byte
+    if (PIND & (1 << IR_RECEIVER_PIN)) {
+      *byteReceived |= (1 << bit);
+    }
+
+    // Wacht op de resterende tijd van de bitduur
+    _delay_us(500);
+  }
+
+  // Wacht op de stopbit (HIGH)
+  while (PIND & (1 << IR_RECEIVER_PIN));
+  _delay_us(2000);
 }
 
 int main(void) {
   setup();  // Voer de setup-functie uit
 
   while (1) {
-    if ((PIND & (1 << RECV_PIN)) == 0) {  // Als er een signaal wordt gedetecteerd
-      PORTD |= (1 << LED_PIN);            // Schakel de LED in
-      _delay_us(250);                     // Wacht 250 us
-      if ((PIND & (1 << RECV_PIN)) == 0) { // Controleer of het signaal aanhoudt
-        irCode = 0;
-        for (int i = 0; i < 8; i++) {   // Lees de 8 bits van het signaal
-          _delay_us(1500);               // Wacht 1,5 ms
-          if ((PIND & (1 << RECV_PIN)) != 0) {
-            irCode |= 1UL << (7 - i);   // Zet de bit op de juiste plaats
-          }
-          _delay_us(1500);               // Wacht nogmaals 1,5 ms
-        }
-        Serial.println(irCode);         // Stuur de code over de seriële poort
-      }
-      PORTD &= ~(1 << LED_PIN);           // Schakel de LED uit
-    }
+    uint8_t byteReceived;
+    receiveIRByte(&byteReceived);
+    Serial.write(receiveIRByte);
   }
 
   return 0;
 }
+
+

@@ -51,4 +51,8 @@ stdio.h
 -
 HardwareSerial.h
 -
+stdio.h
+-
+stdint.h
+-
 
