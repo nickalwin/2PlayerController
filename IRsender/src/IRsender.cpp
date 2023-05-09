@@ -7,28 +7,54 @@
 #endif
 
 #include <avr/io.h>
+#include <stdint.h>
 #include <util/delay.h>
-#include <avr/interrupt.h>
-#include <HardwareSerial.h>
+#include <string.h>
 
-int main(void)
-{
-    DDRD |= (1 << DDD6);                    // pin 13 output mode
-    uint8_t i=0;                            // counter
+#define IR_LED_PIN 6
 
-    Serial.begin(9600);                     // open serial connection
-    Serial.println("hallo");                // Say hi
-    Serial.flush();
+void sendIRByte(uint8_t byteToSend) {
+    // Begin met het sturen van een startbit (LOW)
+    PORTD &= ~(1 << IR_LED_PIN);
+    _delay_ms(2000);
 
-    // endless loop
-    while (1)
-    {
-            Serial.println(i++, DEC);       // show counter
-            Serial.flush();
-
-            PORTD ^= (1<<PORTD6);           // toggle pin
-            _delay_ms(1000);                // wait a while
+    // Verzend elk bit in byteToSend, beginnend met het meest significante bit
+    for (int bit = 7; bit >= 0; bit--) {
+        if (byteToSend & (1 << bit)) {
+            PORTD |= (1 << IR_LED_PIN); // Stuur een HIGH bit
+        } else {
+            PORTD &= ~(1 << IR_LED_PIN); // Stuur een LOW bit
+        }
+        _delay_ms(1000);
     }
 
-    return(0);                              // keep compiler satisfied (no warnings)
+    // Sluit de byte af met een stopbit (HIGH)
+    PORTD |= (1 << IR_LED_PIN);
+    _delay_ms(2000);
+}
+
+void initled(){
+    DDRD |= (1 << IR_LED_PIN);
+}
+
+void sendIRMessage(char* message) {
+  // Verzend elk karakter in het bericht
+  for (int i = 0; i < strlen(message); i++) {
+    uint8_t asciiCode = message[i]; // Haal de ASCII-code op voor het huidige karakter
+    sendIRByte(asciiCode); // Verzend de ASCII-code als een byte
+  }
+}
+
+int main(int argc, char const *argv[])
+{
+    initled();
+
+    while (1)
+    {
+        char* message = "Hello, world!"; // Bericht om te verzenden
+        sendIRMessage(message);
+        _delay_ms(1000); // Wacht 1 seconde voordat u het bericht opnieuw verzendt 
+    }
+    
+    return 0;
 }

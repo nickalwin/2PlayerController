@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/bram/Projects/MIC/IRsender
+CMAKE_SOURCE_DIR = /home/esadev/projects/Project/IRsender
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/bram/Projects/MIC/IRsender/build
+CMAKE_BINARY_DIR = /home/esadev/projects/Project/IRsender/build
 
 # Utility rule file for fuses.
 
@@ -90,6 +90,6 @@ CMakeFiles/fuses.dir/clean:
 .PHONY : CMakeFiles/fuses.dir/clean
 
 CMakeFiles/fuses.dir/depend:
-	cd /home/bram/Projects/MIC/IRsender/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/bram/Projects/MIC/IRsender /home/bram/Projects/MIC/IRsender /home/bram/Projects/MIC/IRsender/build /home/bram/Projects/MIC/IRsender/build /home/bram/Projects/MIC/IRsender/build/CMakeFiles/fuses.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/esadev/projects/Project/IRsender/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/esadev/projects/Project/IRsender /home/esadev/projects/Project/IRsender /home/esadev/projects/Project/IRsender/build /home/esadev/projects/Project/IRsender/build /home/esadev/projects/Project/IRsender/build/CMakeFiles/fuses.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/fuses.dir/depend
 

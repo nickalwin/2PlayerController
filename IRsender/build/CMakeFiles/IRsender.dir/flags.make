@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/avr-g++
 CXX_DEFINES = -DARDUINO=101 -DBAUD=9600 -DF_CPU=16000000UL
 
-CXX_INCLUDES = -I/home/bram/Arduino/include/arduino
+CXX_INCLUDES = -I/home/esadev/Arduino/include/arduino
 
 CXX_FLAGS = -std=gnu++11 -fpermissive -fno-exceptions -fno-threadsafe-statics -Wno-error=narrowing -g -mmcu=atmega328p -MMD -Os -g -ffunction-sections -fdata-sections -flto -fno-fat-lto-objects
 

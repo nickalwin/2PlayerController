@@ -3,7 +3,7 @@ set(CMAKE_HOST_SYSTEM_NAME "Linux")
 set(CMAKE_HOST_SYSTEM_VERSION "5.10.0-21-amd64")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
-include("/home/bram/Arduino/etc/toolchain-avr.cmake")
+include("/home/esadev/Arduino/etc/toolchain-avr.cmake")
 
 set(CMAKE_SYSTEM "Generic-1")
 set(CMAKE_SYSTEM_NAME "Generic")
