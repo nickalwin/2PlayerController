@@ -196,7 +196,7 @@ int listenForIR(void) {
     uint16_t highpulse, lowpulse;  // temporary storage timing
     highpulse = lowpulse = 0; // start out with no pulse length
   
-//  while (digitalRead(IRpin)) { // this is too slow!
+    //  while (digitalRead(IRpin)) { // this is too slow!
     while (IRpin_PIN & (1 << IRpin)) {
        // pin is still HIGH
 
