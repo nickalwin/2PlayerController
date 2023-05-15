@@ -80,6 +80,19 @@ int main(int argc, char const *argv[])
 				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
 				YMotor+=5;
 			}
+			if (XMotor < 0){
+				XMotor = 0;
+			}
+			if (XMotor > 230){
+				XMotor = 230;
+			}
+			if (YMotor > 310){
+				YMotor = 310;
+			}
+			if (YMotor < 0){
+				YMotor = 0;
+			}
+			
 
 		}
 	}
