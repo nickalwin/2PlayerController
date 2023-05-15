@@ -63,37 +63,22 @@ int main(int argc, char const *argv[])
 			tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, 0xf800);
 			if (Nunchuk.state.joy_x_axis== 00)
 			{
+				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
 				XMotor-=5;
-				tft.fillScreen(ILI9341_BLACK);
-
-				tft.setCursor(0, 150);
-				tft.setTextSize(2);
-  				tft.println("Links");
 			} else if (Nunchuk.state.joy_x_axis== 255)
 			{
+				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
 				XMotor+=5;
-				tft.fillScreen(ILI9341_BLACK);
-
-				tft.setCursor(150, 150);
-				tft.setTextSize(2);
-  			tft.println("Rechts"); 
 			}
 			else if (Nunchuk.state.joy_y_axis== 255)
 			{
+				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
 				YMotor-=5;
-				tft.fillScreen(ILI9341_BLACK);
-
-				tft.setCursor(100, 10);
-				tft.setTextSize(2);
-        tft.println("boven");
 			}	
 			else if (Nunchuk.state.joy_y_axis== 00)
 			{
+				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
 				YMotor+=5;
-				tft.fillScreen(ILI9341_BLACK);
-				tft.setCursor(100, 290);
-				tft.setTextSize(2);
-  			tft.println("Onder");
 			}
 
 		}
