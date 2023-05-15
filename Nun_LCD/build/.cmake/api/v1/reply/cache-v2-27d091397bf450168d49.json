@@ -39,7 +39,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/esadev/projects/Project/Nun_LCD/build"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/esadev/projects/Project/Nun_LCD"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1031,7 +1031,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/esadev/projects/Project/Nun_LCD/build"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build"
 		},
 		{
 			"name" : "Nun_LCD_SOURCE_DIR",
@@ -1043,7 +1043,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/esadev/projects/Project/Nun_LCD"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD"
 		}
 	],
 	"kind" : "cache",

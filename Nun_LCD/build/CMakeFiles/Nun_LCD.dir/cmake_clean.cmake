@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   ".lst"
-  "CMakeFiles/Nun_LCD.dir/src/main.cpp.obj"
+  "CMakeFiles/Nun_LCD.dir/src/object.cpp.obj"
   "Nun_LCD.eeprom"
   "Nun_LCD.elf"
   "Nun_LCD.elf.pdb"

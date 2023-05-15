@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/esadev/projects/Project/Nun_LCD
+CMAKE_SOURCE_DIR = /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/esadev/projects/Project/Nun_LCD/build
+CMAKE_BINARY_DIR = /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/projects/Project/Nun_LCD/build/CMakeFiles /home/esadev/projects/Project/Nun_LCD/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build/CMakeFiles /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/projects/Project/Nun_LCD/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -246,32 +246,32 @@ strip/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/strip.dir/build.make CMakeFiles/strip.dir/build
 .PHONY : strip/fast
 
-src/main.obj: src/main.cpp.obj
+src/object.obj: src/object.cpp.obj
 
-.PHONY : src/main.obj
+.PHONY : src/object.obj
 
 # target to build an object file
-src/main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Nun_LCD.dir/build.make CMakeFiles/Nun_LCD.dir/src/main.cpp.obj
-.PHONY : src/main.cpp.obj
+src/object.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Nun_LCD.dir/build.make CMakeFiles/Nun_LCD.dir/src/object.cpp.obj
+.PHONY : src/object.cpp.obj
 
-src/main.i: src/main.cpp.i
+src/object.i: src/object.cpp.i
 
-.PHONY : src/main.i
+.PHONY : src/object.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Nun_LCD.dir/build.make CMakeFiles/Nun_LCD.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/object.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Nun_LCD.dir/build.make CMakeFiles/Nun_LCD.dir/src/object.cpp.i
+.PHONY : src/object.cpp.i
 
-src/main.s: src/main.cpp.s
+src/object.s: src/object.cpp.s
 
-.PHONY : src/main.s
+.PHONY : src/object.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Nun_LCD.dir/build.make CMakeFiles/Nun_LCD.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/object.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Nun_LCD.dir/build.make CMakeFiles/Nun_LCD.dir/src/object.cpp.s
+.PHONY : src/object.cpp.s
 
 # Help Target
 help:
@@ -290,9 +290,9 @@ help:
 	@echo "... upload"
 	@echo "... upload_eeprom"
 	@echo "... Nun_LCD"
-	@echo "... src/main.obj"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/object.obj"
+	@echo "... src/object.i"
+	@echo "... src/object.s"
 .PHONY : help
 
 

@@ -1,5 +1,5 @@
 CMakeFiles/Nun_LCD.dir/src/main.cpp.obj: \
- /home/esadev/projects/Project/Nun_LCD/src/main.cpp \
+ /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/src/main.cpp \
  /home/esadev/Arduino/include/arduino/SPI.h \
  /home/esadev/Arduino/include/arduino/Arduino.h \
  /home/esadev/Arduino/include/arduino/binary.h \

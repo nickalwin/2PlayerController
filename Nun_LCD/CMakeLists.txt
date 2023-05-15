@@ -22,10 +22,11 @@ project("Nun_LCD")
 # Create one target
 # (Linux) `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
-	src/main.cpp
+	#src/main.cpp
 	#src/graphicstest.cpp
 	#src/nunchuk.cpp
-	#src/circle.cpp
+	#src/circle.cpp	
+	src/object.cpp
 )
 
 # Add library

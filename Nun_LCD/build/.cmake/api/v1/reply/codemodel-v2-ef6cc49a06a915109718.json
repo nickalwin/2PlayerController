@@ -54,7 +54,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Nun_LCD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Nun_LCD-Debug-f556467d0345e84bd156.json",
+					"jsonFile" : "target-Nun_LCD-Debug-e9fc1ae95d52dfd96360.json",
 					"name" : "Nun_LCD",
 					"projectIndex" : 0
 				},
@@ -120,8 +120,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/esadev/projects/Project/Nun_LCD/build",
-		"source" : "/home/esadev/projects/Project/Nun_LCD"
+		"build" : "/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build",
+		"source" : "/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD"
 	},
 	"version" : 
 	{

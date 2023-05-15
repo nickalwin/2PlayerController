@@ -166,13 +166,13 @@ Stream.h
 avr/pgmspace.h
 -
 
-/home/esadev/projects/Project/Nun_LCD/src/main.cpp
+/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/src/object.cpp
 SPI.h
-/home/esadev/projects/Project/Nun_LCD/src/SPI.h
+/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/src/SPI.h
 Adafruit_GFX.h
-/home/esadev/projects/Project/Nun_LCD/src/Adafruit_GFX.h
+/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/src/Adafruit_GFX.h
 Adafruit_ILI9341.h
-/home/esadev/projects/Project/Nun_LCD/src/Adafruit_ILI9341.h
+/home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/src/Adafruit_ILI9341.h
 Wire.h
 -
 Nunchuk.h

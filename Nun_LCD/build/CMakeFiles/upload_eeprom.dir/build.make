@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/esadev/projects/Project/Nun_LCD
+CMAKE_SOURCE_DIR = /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/esadev/projects/Project/Nun_LCD/build
+CMAKE_BINARY_DIR = /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build
 
 # Utility rule file for upload_eeprom.
 
@@ -90,6 +90,6 @@ CMakeFiles/upload_eeprom.dir/clean:
 .PHONY : CMakeFiles/upload_eeprom.dir/clean
 
 CMakeFiles/upload_eeprom.dir/depend:
-	cd /home/esadev/projects/Project/Nun_LCD/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/esadev/projects/Project/Nun_LCD /home/esadev/projects/Project/Nun_LCD /home/esadev/projects/Project/Nun_LCD/build /home/esadev/projects/Project/Nun_LCD/build /home/esadev/projects/Project/Nun_LCD/build/CMakeFiles/upload_eeprom.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/build/CMakeFiles/upload_eeprom.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/upload_eeprom.dir/depend
 

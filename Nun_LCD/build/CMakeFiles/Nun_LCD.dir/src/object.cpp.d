@@ -1,5 +1,5 @@
-CMakeFiles/Nun_LCD.dir/src/graphicstest.cpp.obj: \
- /home/esadev/projects/Project/Nun_LCD/src/graphicstest.cpp \
+CMakeFiles/Nun_LCD.dir/src/object.cpp.obj: \
+ /home/esadev/Documents/GitHub/2PlayerController/Nun_LCD/src/object.cpp \
  /home/esadev/Arduino/include/arduino/SPI.h \
  /home/esadev/Arduino/include/arduino/Arduino.h \
  /home/esadev/Arduino/include/arduino/binary.h \
@@ -19,4 +19,6 @@ CMakeFiles/Nun_LCD.dir/src/graphicstest.cpp.obj: \
  /home/esadev/Arduino/include/arduino/Adafruit_SPIDevice.h \
  /home/esadev/Arduino/include/arduino/Adafruit_ILI9341.h \
  /home/esadev/Arduino/include/arduino/Adafruit_GFX.h \
- /home/esadev/Arduino/include/arduino/Adafruit_SPITFT.h
+ /home/esadev/Arduino/include/arduino/Adafruit_SPITFT.h \
+ /home/esadev/Arduino/include/arduino/Nunchuk.h \
+ /home/esadev/Arduino/include/arduino/HardwareSerial.h
