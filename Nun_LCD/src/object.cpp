@@ -45,8 +45,10 @@ int main(int argc, char const *argv[])
 	uint16_t c = ILI9341_MAGENTA;	// circle color
 	uint16_t d = RADIUS * 2;	// circle diameter
 
-  int XMotor = 50;
-  int YMotor = 50;
+  int16_t XMotor = 50;
+  int16_t YMotor = 50;
+
+  int8_t richting = 1;
 
 	tft.fillScreen(ILI9341_BLACK);	// clear screen
 
@@ -60,25 +62,36 @@ int main(int argc, char const *argv[])
 	while (1) {		
 		if (Nunchuk.getState(NUNCHUK_ADDRESS))
 		{
+			
 			tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, 0xf800);
-			if (Nunchuk.state.joy_x_axis== 00)
+			tft.drawLine(XMotor-1, YMotor-1 ,XMotor ,YMotor, 0xf800);
+
+			if (Nunchuk.state.joy_x_axis== 00 && richting!=1)
 			{
 				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
-				XMotor-=5;
-			} else if (Nunchuk.state.joy_x_axis== 255)
+				XMotor-=1;
+				richting = 3;
+				//tft.drawLine(XMotor+1, YMotor ,XMotor ,YMotor, 0xf800);
+			} else if (Nunchuk.state.joy_x_axis== 255 && richting != 3)
 			{
 				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
-				XMotor+=5;
+				XMotor+=1;
+				richting = 1;
+				//tft.drawLine(XMotor-1, YMotor ,XMotor ,YMotor, 0xf800);
 			}
-			else if (Nunchuk.state.joy_y_axis== 255)
+			else if (Nunchuk.state.joy_y_axis== 255 && richting!= 2)
 			{
 				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
-				YMotor-=5;
+				YMotor-=1;
+				richting = 0;
+				//tft.drawLine(XMotor, YMotor ,XMotor ,YMotor+11, 0xf800);
 			}	
-			else if (Nunchuk.state.joy_y_axis== 00)
+			else if (Nunchuk.state.joy_y_axis== 00 && richting!= 0)
 			{
 				tft.fillTriangle(XMotor, YMotor, XMotor, YMotor+10, XMotor+10, YMotor+5, ILI9341_BLACK);
-				YMotor+=5;
+				YMotor+=1;
+				richting = 2;
+				//tft.drawLine(XMotor, YMotor ,XMotor ,YMotor-1, 0xf800);
 			}
 			if (XMotor < 0){
 				XMotor = 0;
