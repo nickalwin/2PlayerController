@@ -116,31 +116,28 @@ while (1){
 			{
 				tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, 0xf800);
 			}
-			
 
-			if (Nunchuk.state.joy_x_axis== 00 && richting!=1)
+			//timer zornder delay
+			TCNT1 = 0;
+			TCCR1A = 0;
+			TCCR1B = 0;
+			TCCR1B |= (1 << CS12) | (1 << CS10);
+			TIMSK1 |= (1 << TOIE1);
+			sei();
+			while (TCNT1 < 500)
+			{
+				//do nothing
+			}
+			if (richting == 0 || richting == 2)
 			{
 				tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
-				tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
-				if(richting!=3)XMotor-=10;
-				else XMotor-=1;
-				richting = 3;
-				lijn[0][teller] = XMotor+10;
-                lijn[1][teller] = YMotor+2;
-                tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
-                teller++;
-                if (teller == 128)
-                {
-                    teller = 0;
-                }
-                tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
-			} else if (Nunchuk.state.joy_x_axis== 255 && richting != 3)
+			}
+			else if (richting == 1 || richting == 3)
 			{
-				tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
 				tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
-				if(richting!=1)XMotor+=5;
-				else XMotor+=1;
-				richting = 1;
+			}
+			if(richting==1){
+				XMotor+=1;
 				lijn[0][teller] = XMotor;
                 lijn[1][teller] = YMotor+3;
                 tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
@@ -151,14 +148,21 @@ while (1){
                 }
                 tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
 			}
-			else if (Nunchuk.state.joy_y_axis== 255 && richting!= 2)
-			{
-				tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
-				tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
-				if(richting!=0)YMotor-=10;
-				else YMotor-=1;
-				richting = 0;
-				lijn[0][teller] = XMotor+2;
+			if(richting==3){
+				XMotor-=1;
+				lijn[0][teller] = XMotor+10;
+                lijn[1][teller] = YMotor+3;
+                tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
+                teller++;
+                if (teller == 128)
+                {
+                    teller = 0;
+                }
+                tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
+			}
+			if(richting==0){
+				YMotor-=1;
+				lijn[0][teller] = XMotor+3;
                 lijn[1][teller] = YMotor+10;
                 tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
                 teller++;
@@ -167,14 +171,9 @@ while (1){
                     teller = 0;
                 }
                 tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
-			}	
-			else if (Nunchuk.state.joy_y_axis== 00 && richting!= 0)
-			{
-				tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
-				tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
-				if(richting!=2)YMotor+=8;
-				else YMotor+=1;
-				richting = 2;
+			}
+			if(richting==2){
+				YMotor+=1;
 				lijn[0][teller] = XMotor+3;
                 lijn[1][teller] = YMotor;
                 tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
@@ -184,6 +183,75 @@ while (1){
                     teller = 0;
                 }
                 tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
+			}
+			
+
+			if (Nunchuk.state.joy_x_axis== 00 && richting!=1)
+			{
+				// tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
+				// tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
+				if(richting!=3)XMotor-=10;
+				// else XMotor-=1;
+				richting = 3;
+				// lijn[0][teller] = XMotor+10;
+                // lijn[1][teller] = YMotor+2;
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
+                // teller++;
+                // if (teller == 128)
+                // {
+                //     teller = 0;
+                // }
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
+			} else if (Nunchuk.state.joy_x_axis== 255 && richting != 3)
+			{
+				// tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
+				// tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
+				if(richting!=1)XMotor+=5;
+				// else XMotor+=1;
+				richting = 1;
+				// lijn[0][teller] = XMotor;
+                // lijn[1][teller] = YMotor+3;
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
+                // teller++;
+                // if (teller == 128)
+                // {
+                //     teller = 0;
+                // }
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
+			}
+			else if (Nunchuk.state.joy_y_axis== 255 && richting!= 2)
+			{
+				// tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
+				// tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
+				if(richting!=0)YMotor-=10;
+				// else YMotor-=1;
+				richting = 0;
+				// lijn[0][teller] = XMotor+2;
+                // lijn[1][teller] = YMotor+10;
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
+                // teller++;
+                // if (teller == 128)
+                // {
+                //     teller = 0;
+                // }
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
+			}	
+			else if (Nunchuk.state.joy_y_axis== 00 && richting!= 0)
+			{
+				// tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
+				// tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, ILI9341_BLACK);
+				if(richting!=2)YMotor+=8;
+				// else YMotor+=1;
+				richting = 2;
+				// lijn[0][teller] = XMotor+3;
+                // lijn[1][teller] = YMotor;
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, 0xf800);
+                // teller++;
+                // if (teller == 128)
+                // {
+                //     teller = 0;
+                // }
+                // tft.drawLine(lijn[0][teller], lijn[1][teller],lijn[0][teller]-1, lijn[1][teller]-1, ILI9341_BLACK);
 			}
 			if (XMotor < 0){
 				alive = 0;
@@ -209,8 +277,6 @@ while (1){
 				}
 			}
 			
-			
-
 		}
 	}
 	}
