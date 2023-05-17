@@ -162,9 +162,9 @@ Stream.h
 avr/pgmspace.h
 -
 
-/home/esadev/projects/Project/IR_Reciever/src/ircodes.h
+/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/ircodes.h
 
-/home/esadev/projects/Project/IR_Reciever/src/main.cpp
+/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/main.cpp
 avr/io.h
 -
 HardwareSerial.h
@@ -172,11 +172,11 @@ HardwareSerial.h
 Arduino.h
 -
 SPI.h
-/home/esadev/projects/Project/IR_Reciever/src/SPI.h
+/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/SPI.h
 Adafruit_GFX.h
-/home/esadev/projects/Project/IR_Reciever/src/Adafruit_GFX.h
+/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/Adafruit_GFX.h
 Adafruit_ILI9341.h
-/home/esadev/projects/Project/IR_Reciever/src/Adafruit_ILI9341.h
+/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/Adafruit_ILI9341.h
 Wire.h
 -
 util/delay.h
@@ -184,5 +184,5 @@ util/delay.h
 avr/interrupt.h
 -
 ircodes.h
-/home/esadev/projects/Project/IR_Reciever/src/ircodes.h
+/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/ircodes.h
 

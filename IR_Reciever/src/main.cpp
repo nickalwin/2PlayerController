@@ -92,19 +92,19 @@ int main(int argc, char const *argv[])
   while (1)
   {
     int numberpulses;
-  
     numberpulses = listenForIR();
 
-    Serial.println("-pulse long IR signal");
-    if (IRcompare(numberpulses, ApplePlaySignal,sizeof(ApplePlaySignal)/4)) { //CH- knop op afstandbedieing
-      Serial.println("Links");
+    Serial.println(" ");
+
+    if (IRcompare(numberpulses, Boven,sizeof(Boven)/4)) {
+      Serial.println("Boven");
 				tft.setCursor(0, 150);
 				tft.setTextSize(2);
-  			tft.println("Links");
+  			tft.println("Boven");
         _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK);               
     }
-      if (IRcompare(numberpulses, AppleRewindSignal,sizeof(AppleRewindSignal)/4)) { //CH knop op de afstandbedieing
+      if (IRcompare(numberpulses, Rechts,sizeof(Rechts)/4)) {
       Serial.println("Rechts");
 				tft.setCursor(150, 150);
 				tft.setTextSize(2);
@@ -112,23 +112,24 @@ int main(int argc, char const *argv[])
         _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK);               
     }
-      if (IRcompare(numberpulses, AppleForwardSignal,sizeof(AppleForwardSignal)/4)) { // CH+ knop op afstandbedieding
-      Serial.println("Boven");
+      if (IRcompare(numberpulses, Links,sizeof(Links)/4)) {
+      Serial.println("Links");
 				tft.setCursor(100, 10);
 				tft.setTextSize(2);
-  			tft.println("Boven");
+  			tft.println("Links");
         _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK);               
     }
-      if (IRcompare(numberpulses, Applesucks,sizeof(Applesucks)/4)) { // Play en pauze knop op afstandbedieidng
+      if (IRcompare(numberpulses, Onder,sizeof(Onder)/4)) {
       Serial.println("Onder");
 				tft.setCursor(100, 290);
 				tft.setTextSize(2);
   			tft.println("Onder");
         _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK); 
-    } 
-    delay(500);
+    }
+    
+    _delay_ms(20);
   }
   
 }
@@ -136,8 +137,6 @@ int main(int argc, char const *argv[])
 //KGO: added size of compare sample. Only compare the minimum of the two
 boolean IRcompare(int numpulses, int Signal[], int refsize) {
   int count = min(numpulses,refsize);
-  Serial.print("count set to: ");
-  Serial.println(count);
   for (int i=0; i< count-1; i++) {
     int oncode = pulses[i][1] * RESOLUTION / 10;
     int offcode = pulses[i+1][0] * RESOLUTION / 10;
@@ -202,7 +201,7 @@ int listenForIR(void) {
 
        // count off another few microseconds
        highpulse++;
-       delayMicroseconds(RESOLUTION);
+      //  delayMicroseconds(RESOLUTION);
 
        // If the pulse is too long, we 'timed out' - either nothing
        // was received or the code is finished, so print what
@@ -220,7 +219,7 @@ int listenForIR(void) {
     while (! (IRpin_PIN & _BV(IRpin))) {
        // pin is still LOW
        lowpulse++;
-       delayMicroseconds(RESOLUTION);
+      //  delayMicroseconds(RESOLUTION);
         // KGO: Added check for end of receive buffer
         if (((lowpulse >= MAXPULSE)  && (currentpulse != 0))|| currentpulse == NUMPULSES) {
          return currentpulse;
@@ -232,72 +231,78 @@ int listenForIR(void) {
     currentpulse++;
   }
 }
-void printpulses(void) {
-  Serial.println("\n\r\n\rReceived: \n\rOFF \tON");
-  for (uint8_t i = 0; i < currentpulse; i++) {
-    Serial.print(pulses[i][0] * RESOLUTION, DEC);
-    Serial.print(" usec, ");
-    Serial.print(pulses[i][1] * RESOLUTION, DEC);
-    Serial.println(" usec");
-  }
+
+
+
+
+// methodes om te helpen ----------------------------------------------------------------------------------
+
+// void printpulses(void) {
+//   Serial.println("\n\r\n\rReceived: \n\rOFF \tON");
+//   for (uint8_t i = 0; i < currentpulse; i++) {
+//     Serial.print(pulses[i][0] * RESOLUTION, DEC);
+//     Serial.print(" usec, ");
+//     Serial.print(pulses[i][1] * RESOLUTION, DEC);
+//     Serial.println(" usec");
+//   }
   
-  // print it in a 'array' format
-  Serial.println("int IRsignal[] = {");
-  Serial.println("// ON, OFF (in 10's of microseconds)");
-  for (uint8_t i = 0; i < currentpulse-1; i++) {
-    Serial.print("\t"); // tab
-    Serial.print(pulses[i][1] * RESOLUTION / 10, DEC);
-    Serial.print(", ");
-    Serial.print(pulses[i+1][0] * RESOLUTION / 10, DEC);
-    Serial.println(",");
-  }
-  Serial.print("\t"); // tab
-  Serial.print(pulses[currentpulse-1][1] * RESOLUTION / 10, DEC);
-  Serial.print(", 0};");
-}
+//   // print it in a 'array' format
+//   Serial.println("int IRsignal[] = {");
+//   Serial.println("// ON, OFF (in 10's of microseconds)");
+//   for (uint8_t i = 0; i < currentpulse-1; i++) {
+//     Serial.print("\t"); // tab
+//     Serial.print(pulses[i][1] * RESOLUTION / 10, DEC);
+//     Serial.print(", ");
+//     Serial.print(pulses[i+1][0] * RESOLUTION / 10, DEC);
+//     Serial.println(",");
+//   }
+//   Serial.print("\t"); // tab
+//   Serial.print(pulses[currentpulse-1][1] * RESOLUTION / 10, DEC);
+//   Serial.print(", 0};");
+// }
 
-unsigned long testRects(uint16_t color) {
-  unsigned long start;
-  int           n, i, i2,
-                cx = tft.width()  / 2,
-                cy = tft.height() / 2;
+// unsigned long testRects(uint16_t color) {
+//   unsigned long start;
+//   int           n, i, i2,
+//                 cx = tft.width()  / 2,
+//                 cy = tft.height() / 2;
 
-  tft.fillScreen(ILI9341_BLACK);
-  n     = min(tft.width(), tft.height());
-  //start = micros();
-  for(i=2; i<n; i+=6) {
-    i2 = i / 2;
-    tft.drawRect(cx-i2, cy-i2, i, i, color);
-  }
+//   tft.fillScreen(ILI9341_BLACK);
+//   n     = min(tft.width(), tft.height());
+//   //start = micros();
+//   for(i=2; i<n; i+=6) {
+//     i2 = i / 2;
+//     tft.drawRect(cx-i2, cy-i2, i, i, color);
+//   }
 
-  //return micros() - start;
-  return 0;
-}
+//   //return micros() - start;
+//   return 0;
+// }
 
-unsigned long testText() {
-  tft.fillScreen(ILI9341_BLACK);
-  //unsigned long start = micros();
-  tft.setCursor(0, 0);
-  tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
-  tft.println("Hello World!");
-  tft.setTextColor(ILI9341_YELLOW); tft.setTextSize(2);
-  tft.println(1234.56);
-  tft.setTextColor(ILI9341_RED);    tft.setTextSize(3);
-  tft.println(0xDEADBEEF, HEX);
-  tft.println();
-  tft.setTextColor(ILI9341_GREEN);
-  tft.setTextSize(5);
-  tft.println("Groop");
-  tft.setTextSize(2);
-  tft.println("I implore thee,");
-  tft.setTextSize(1);
-  tft.println("my foonting turlingdromes.");
-  tft.println("And hooptiously drangle me");
-  tft.println("with crinkly bindlewurdles,");
-  tft.println("Or I will rend thee");
-  tft.println("in the gobberwarts");
-  tft.println("with my blurglecruncheon,");
-  tft.println("see if I don't!");
-  //return micros() - start;
-  return 0;
-}
+// unsigned long testText() {
+//   tft.fillScreen(ILI9341_BLACK);
+//   //unsigned long start = micros();
+//   tft.setCursor(0, 0);
+//   tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
+//   tft.println("Hello World!");
+//   tft.setTextColor(ILI9341_YELLOW); tft.setTextSize(2);
+//   tft.println(1234.56);
+//   tft.setTextColor(ILI9341_RED);    tft.setTextSize(3);
+//   tft.println(0xDEADBEEF, HEX);
+//   tft.println();
+//   tft.setTextColor(ILI9341_GREEN);
+//   tft.setTextSize(5);
+//   tft.println("Groop");
+//   tft.setTextSize(2);
+//   tft.println("I implore thee,");
+//   tft.setTextSize(1);
+//   tft.println("my foonting turlingdromes.");
+//   tft.println("And hooptiously drangle me");
+//   tft.println("with crinkly bindlewurdles,");
+//   tft.println("Or I will rend thee");
+//   tft.println("in the gobberwarts");
+//   tft.println("with my blurglecruncheon,");
+//   tft.println("see if I don't!");
+//   //return micros() - start;
+//   return 0;
+// }

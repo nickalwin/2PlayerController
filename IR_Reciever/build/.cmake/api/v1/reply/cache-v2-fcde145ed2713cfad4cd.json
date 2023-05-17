@@ -39,7 +39,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/esadev/projects/Project/IR_Reciever/build"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/esadev/projects/Project/IR_Reciever"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1031,7 +1031,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/esadev/projects/Project/IR_Reciever/build"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build"
 		},
 		{
 			"name" : "IR_Reciever_SOURCE_DIR",
@@ -1043,7 +1043,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/esadev/projects/Project/IR_Reciever"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever"
 		}
 	],
 	"kind" : "cache",

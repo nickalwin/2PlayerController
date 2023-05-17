@@ -1,5 +1,5 @@
 CMakeFiles/IR_Reciever.dir/src/main.cpp.obj: \
- /home/esadev/projects/Project/IR_Reciever/src/main.cpp \
+ /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/main.cpp \
  /home/esadev/Arduino/include/arduino/HardwareSerial.h \
  /home/esadev/Arduino/include/arduino/Stream.h \
  /home/esadev/Arduino/include/arduino/Print.h \
@@ -21,4 +21,4 @@ CMakeFiles/IR_Reciever.dir/src/main.cpp.obj: \
  /home/esadev/Arduino/include/arduino/Adafruit_ILI9341.h \
  /home/esadev/Arduino/include/arduino/Adafruit_GFX.h \
  /home/esadev/Arduino/include/arduino/Adafruit_SPITFT.h \
- /home/esadev/projects/Project/IR_Reciever/src/ircodes.h
+ /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/ircodes.h

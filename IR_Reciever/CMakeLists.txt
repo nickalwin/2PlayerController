@@ -23,6 +23,8 @@ project("IR_Reciever")
 # (Linux) `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
 	src/main.cpp
+	#src/test.cpp
+	#src/sender.cpp
 	#src/graphicstest.cpp
 	#src/nunchuk.cpp
 	#src/circle.cpp

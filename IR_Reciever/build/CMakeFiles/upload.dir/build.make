@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/esadev/projects/Project/IR_Reciever
+CMAKE_SOURCE_DIR = /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/esadev/projects/Project/IR_Reciever/build
+CMAKE_BINARY_DIR = /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build
 
 # Utility rule file for upload.
 
@@ -90,6 +90,6 @@ CMakeFiles/upload.dir/clean:
 .PHONY : CMakeFiles/upload.dir/clean
 
 CMakeFiles/upload.dir/depend:
-	cd /home/esadev/projects/Project/IR_Reciever/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/esadev/projects/Project/IR_Reciever /home/esadev/projects/Project/IR_Reciever /home/esadev/projects/Project/IR_Reciever/build /home/esadev/projects/Project/IR_Reciever/build /home/esadev/projects/Project/IR_Reciever/build/CMakeFiles/upload.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build/CMakeFiles/upload.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/upload.dir/depend
 
