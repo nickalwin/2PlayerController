@@ -58,7 +58,10 @@ int main(int argc, char const *argv[])
 {
     //--------------------------------------------------
     // timer
-
+    TCCR1A = 0;
+    TCCR1B = 0;
+    TCCR1B |= (1 << CS12) | (1 << CS10);
+    TIMSK1 |= (1 << TOIE1);
     //----------------------------------------------------------------
 
     sei();				// enable global interrupts
@@ -67,10 +70,9 @@ int main(int argc, char const *argv[])
 
     //-------------------------------------------------------------------
 
-    Serial.println("Ready to send and receive IR!");
+    //Serial.println("Ready to send and receive IR!");
 
     // handshake with nunchuk
-	  Serial.print("-------- Connecting to nunchuk at address 0x");
 	  Serial.println(NUNCHUK_ADDRESS, HEX);
     if (!Nunchuk.begin(NUNCHUK_ADDRESS))
     {
@@ -149,11 +151,6 @@ int main(int argc, char const *argv[])
 
 void timer(int miliseconds){
     TCNT1 = 0;
-    TCCR1A = 0;
-    TCCR1B = 0;
-    TCCR1B |= (1 << CS12) | (1 << CS10);
-    TIMSK1 |= (1 << TOIE1);
-    sei();
     while (TCNT1 < (miliseconds))
     {
         //doe niks
@@ -168,12 +165,10 @@ void pulseIR(long microsecs) {
   {
     while (microsecs > 0) {
     // 38 kHz
-    digitalWrite(IRledPin, HIGH);
+    DDRD |= (1 << IRledPin);  // set the LED on
     timer(10);  
-    // delayMicroseconds(10);         
-    digitalWrite(IRledPin, LOW);
-    timer(10);   
-    // delayMicroseconds(10);         
+    DDRD &= ~(1 << IRledPin);  // set the LED off
+    timer(10);          
  
     // niet aankomen
     microsecs -= 26; 
@@ -181,11 +176,9 @@ void pulseIR(long microsecs) {
   } else if (!is38khz) {
       while (microsecs > 0) {
       // 56 kHz 
-      digitalWrite(IRledPin, HIGH);  // duurt 3 microseconds
-      // delayMicroseconds(6);
+      DDRD |= (1 << IRledPin);  // set the LED on
       timer(6);         
-      digitalWrite(IRledPin, LOW);   
-      // delayMicroseconds(6);
+      DDRD &= ~(1 << IRledPin);  // set the LED off
       timer(6);        
  
       // niet aankomen
