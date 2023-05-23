@@ -39,7 +39,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/esadev/projects/Project/IRsender/build"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/esadev/projects/Project/IRsender"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1031,7 +1031,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/esadev/projects/Project/IRsender/build"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender/build"
 		},
 		{
 			"name" : "IRsender_SOURCE_DIR",
@@ -1043,7 +1043,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/esadev/projects/Project/IRsender"
+			"value" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender"
 		}
 	],
 	"kind" : "cache",

@@ -246,32 +246,32 @@ strip/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/strip.dir/build.make CMakeFiles/strip.dir/build
 .PHONY : strip/fast
 
-src/main.obj: src/main.cpp.obj
+src/IRprotocol.obj: src/IRprotocol.cpp.obj
 
-.PHONY : src/main.obj
+.PHONY : src/IRprotocol.obj
 
 # target to build an object file
-src/main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/IR_Reciever.dir/build.make CMakeFiles/IR_Reciever.dir/src/main.cpp.obj
-.PHONY : src/main.cpp.obj
+src/IRprotocol.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IR_Reciever.dir/build.make CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj
+.PHONY : src/IRprotocol.cpp.obj
 
-src/main.i: src/main.cpp.i
+src/IRprotocol.i: src/IRprotocol.cpp.i
 
-.PHONY : src/main.i
+.PHONY : src/IRprotocol.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/IR_Reciever.dir/build.make CMakeFiles/IR_Reciever.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/IRprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IR_Reciever.dir/build.make CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.i
+.PHONY : src/IRprotocol.cpp.i
 
-src/main.s: src/main.cpp.s
+src/IRprotocol.s: src/IRprotocol.cpp.s
 
-.PHONY : src/main.s
+.PHONY : src/IRprotocol.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/IR_Reciever.dir/build.make CMakeFiles/IR_Reciever.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/IRprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IR_Reciever.dir/build.make CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.s
+.PHONY : src/IRprotocol.cpp.s
 
 # Help Target
 help:
@@ -290,9 +290,9 @@ help:
 	@echo "... upload"
 	@echo "... upload_eeprom"
 	@echo "... IR_Reciever"
-	@echo "... src/main.obj"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/IRprotocol.obj"
+	@echo "... src/IRprotocol.i"
+	@echo "... src/IRprotocol.s"
 .PHONY : help
 
 

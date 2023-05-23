@@ -76,27 +76,27 @@ include CMakeFiles/IR_Reciever.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/IR_Reciever.dir/flags.make
 
-CMakeFiles/IR_Reciever.dir/src/main.cpp.obj: CMakeFiles/IR_Reciever.dir/flags.make
-CMakeFiles/IR_Reciever.dir/src/main.cpp.obj: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/IR_Reciever.dir/src/main.cpp.obj"
-	/usr/bin/avr-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/IR_Reciever.dir/src/main.cpp.obj -c /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/main.cpp
+CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj: CMakeFiles/IR_Reciever.dir/flags.make
+CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj: ../src/IRprotocol.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj"
+	/usr/bin/avr-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj -c /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/IRprotocol.cpp
 
-CMakeFiles/IR_Reciever.dir/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IR_Reciever.dir/src/main.cpp.i"
-	/usr/bin/avr-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/main.cpp > CMakeFiles/IR_Reciever.dir/src/main.cpp.i
+CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.i"
+	/usr/bin/avr-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/IRprotocol.cpp > CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.i
 
-CMakeFiles/IR_Reciever.dir/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IR_Reciever.dir/src/main.cpp.s"
-	/usr/bin/avr-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/main.cpp -o CMakeFiles/IR_Reciever.dir/src/main.cpp.s
+CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.s"
+	/usr/bin/avr-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/src/IRprotocol.cpp -o CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.s
 
 # Object files for target IR_Reciever
 IR_Reciever_OBJECTS = \
-"CMakeFiles/IR_Reciever.dir/src/main.cpp.obj"
+"CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj"
 
 # External object files for target IR_Reciever
 IR_Reciever_EXTERNAL_OBJECTS =
 
-IR_Reciever.elf: CMakeFiles/IR_Reciever.dir/src/main.cpp.obj
+IR_Reciever.elf: CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj
 IR_Reciever.elf: CMakeFiles/IR_Reciever.dir/build.make
 IR_Reciever.elf: CMakeFiles/IR_Reciever.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/esadev/Documents/GitHub/2PlayerController/IR_Reciever/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable IR_Reciever.elf"

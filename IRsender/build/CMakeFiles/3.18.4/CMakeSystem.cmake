@@ -1,6 +1,6 @@
-set(CMAKE_HOST_SYSTEM "Linux-5.10.0-21-amd64")
+set(CMAKE_HOST_SYSTEM "Linux-5.10.0-22-amd64")
 set(CMAKE_HOST_SYSTEM_NAME "Linux")
-set(CMAKE_HOST_SYSTEM_VERSION "5.10.0-21-amd64")
+set(CMAKE_HOST_SYSTEM_VERSION "5.10.0-22-amd64")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
 include("/home/esadev/Arduino/etc/toolchain-avr.cmake")

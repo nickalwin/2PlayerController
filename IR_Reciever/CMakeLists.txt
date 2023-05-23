@@ -22,7 +22,8 @@ project("IR_Reciever")
 # Create one target
 # (Linux) `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
-	src/main.cpp
+	# src/main.cpp
+	src/IRprotocol.cpp
 	#src/test.cpp
 	#src/sender.cpp
 	#src/graphicstest.cpp

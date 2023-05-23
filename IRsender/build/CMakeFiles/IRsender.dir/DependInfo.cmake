@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/esadev/projects/Project/IRsender/src/IRsender.cpp" "/home/esadev/projects/Project/IRsender/build/CMakeFiles/IRsender.dir/src/IRsender.cpp.obj"
+  "/home/esadev/Documents/GitHub/2PlayerController/IRsender/src/sender.cpp" "/home/esadev/Documents/GitHub/2PlayerController/IRsender/build/CMakeFiles/IRsender.dir/src/sender.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

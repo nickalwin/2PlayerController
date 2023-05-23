@@ -25,11 +25,18 @@ bool algeweest2 = false;
 bool algeweest3 = false;
 bool algeweest4 = false;
  
- 
 void setup()   {                
   // initialize the IR digital pin as an output:
   pinMode(IRledPin, OUTPUT);      
-	// enable global interrupts
+
+  //timer
+  TCNT1 = 0;
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCCR1B |= (1 << CS12) | (1 << CS10);
+  TIMSK1 |= (1 << TOIE1);
+
+  // enable global interrupts
 	sei();
 
 	// use Serial for printing nunchuk data
@@ -48,7 +55,20 @@ void setup()   {
 	}
 }
  
-void loop()                     
+void timer(int microseconds){
+            TCNT1 = 0;
+            TCCR1A = 0;
+            TCCR1B = 0;
+            TCCR1B |= (1 << CS12) | (1 << CS10);
+            TIMSK1 |= (1 << TOIE1);
+            sei();
+            while (TCNT1 < (microseconds/1000))
+            {
+                //doe niks
+            }
+}
+
+ void loop()                     
 {
   if (Nunchuk.getState(NUNCHUK_ADDRESS))
 		{
@@ -103,10 +123,12 @@ void pulseIR(long microsecs) {
   {
     while (microsecs > 0) {
     // 38 kHz
-    digitalWrite(IRledPin, HIGH);  
-    delayMicroseconds(10);         
-    digitalWrite(IRledPin, LOW);   
-    delayMicroseconds(10);         
+    digitalWrite(IRledPin, HIGH);
+    timer(10);  
+    // delayMicroseconds(10);         
+    digitalWrite(IRledPin, LOW);
+    timer(10);   
+    // delayMicroseconds(10);         
  
     // niet aankomen
     microsecs -= 26; 
@@ -115,9 +137,11 @@ void pulseIR(long microsecs) {
       while (microsecs > 0) {
       // 56 kHz 
       digitalWrite(IRledPin, HIGH);  // duurt 3 microseconds
-      delayMicroseconds(6);         
+      // delayMicroseconds(6);
+      timer(6);         
       digitalWrite(IRledPin, LOW);   
-      delayMicroseconds(6);         
+      // delayMicroseconds(6);
+      timer(6);        
  
       // niet aankomen
       microsecs -= 26;

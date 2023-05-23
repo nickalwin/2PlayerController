@@ -22,7 +22,7 @@ project("IRsender")
 # Create one target
 # (Linux) `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
-    src/IRsender.cpp
+    src/sender.cpp
 )
 
 # Add arduino core library
@@ -33,7 +33,13 @@ target_link_directories(${PROJECT_NAME} PRIVATE
     "${ARDUINO_PATH}/lib"
 )
 target_link_libraries(${PROJECT_NAME}
-    ArduinoCore
+	ILI9341
+	GFX
+	BusIO
+	SPI
+	Nunchuk
+	Wire
+	ArduinoCore
 )
 
 # Rename the output to .elf as we will create multiple files

@@ -1,4 +1,4 @@
-# Install script for directory: /home/esadev/projects/Project/IRsender
+# Install script for directory: /home/esadev/Documents/GitHub/2PlayerController/IRsender
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/esadev/projects/Project/IRsender/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/esadev/Documents/GitHub/2PlayerController/IRsender/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

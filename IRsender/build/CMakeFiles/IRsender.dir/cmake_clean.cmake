@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   ".lst"
-  "CMakeFiles/IRsender.dir/src/IRsender.cpp.obj"
+  "CMakeFiles/IRsender.dir/src/sender.cpp.obj"
   "IRsender.eeprom"
   "IRsender.elf"
   "IRsender.elf.pdb"

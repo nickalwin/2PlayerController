@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/esadev/projects/Project/IRsender
+CMAKE_SOURCE_DIR = /home/esadev/Documents/GitHub/2PlayerController/IRsender
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/esadev/projects/Project/IRsender/build
+CMAKE_BINARY_DIR = /home/esadev/Documents/GitHub/2PlayerController/IRsender/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/projects/Project/IRsender/build/CMakeFiles /home/esadev/projects/Project/IRsender/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/Documents/GitHub/2PlayerController/IRsender/build/CMakeFiles /home/esadev/Documents/GitHub/2PlayerController/IRsender/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/projects/Project/IRsender/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/esadev/Documents/GitHub/2PlayerController/IRsender/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -246,32 +246,32 @@ strip/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/strip.dir/build.make CMakeFiles/strip.dir/build
 .PHONY : strip/fast
 
-src/IRsender.obj: src/IRsender.cpp.obj
+src/sender.obj: src/sender.cpp.obj
 
-.PHONY : src/IRsender.obj
+.PHONY : src/sender.obj
 
 # target to build an object file
-src/IRsender.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRsender.dir/build.make CMakeFiles/IRsender.dir/src/IRsender.cpp.obj
-.PHONY : src/IRsender.cpp.obj
+src/sender.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRsender.dir/build.make CMakeFiles/IRsender.dir/src/sender.cpp.obj
+.PHONY : src/sender.cpp.obj
 
-src/IRsender.i: src/IRsender.cpp.i
+src/sender.i: src/sender.cpp.i
 
-.PHONY : src/IRsender.i
+.PHONY : src/sender.i
 
 # target to preprocess a source file
-src/IRsender.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRsender.dir/build.make CMakeFiles/IRsender.dir/src/IRsender.cpp.i
-.PHONY : src/IRsender.cpp.i
+src/sender.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRsender.dir/build.make CMakeFiles/IRsender.dir/src/sender.cpp.i
+.PHONY : src/sender.cpp.i
 
-src/IRsender.s: src/IRsender.cpp.s
+src/sender.s: src/sender.cpp.s
 
-.PHONY : src/IRsender.s
+.PHONY : src/sender.s
 
 # target to generate assembly for a file
-src/IRsender.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRsender.dir/build.make CMakeFiles/IRsender.dir/src/IRsender.cpp.s
-.PHONY : src/IRsender.cpp.s
+src/sender.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRsender.dir/build.make CMakeFiles/IRsender.dir/src/sender.cpp.s
+.PHONY : src/sender.cpp.s
 
 # Help Target
 help:
@@ -290,9 +290,9 @@ help:
 	@echo "... upload"
 	@echo "... upload_eeprom"
 	@echo "... IRsender"
-	@echo "... src/IRsender.obj"
-	@echo "... src/IRsender.i"
-	@echo "... src/IRsender.s"
+	@echo "... src/sender.obj"
+	@echo "... src/sender.i"
+	@echo "... src/sender.s"
 .PHONY : help
 
 

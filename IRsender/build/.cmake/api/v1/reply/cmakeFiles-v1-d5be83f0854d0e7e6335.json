@@ -128,8 +128,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/esadev/projects/Project/IRsender/build",
-		"source" : "/home/esadev/projects/Project/IRsender"
+		"build" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender/build",
+		"source" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender"
 	},
 	"version" : 
 	{

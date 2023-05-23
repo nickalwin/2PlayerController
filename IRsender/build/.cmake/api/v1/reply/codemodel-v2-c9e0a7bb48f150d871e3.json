@@ -54,7 +54,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "IRsender::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-IRsender-Debug-175c404e80c52efea4b1.json",
+					"jsonFile" : "target-IRsender-Debug-bad345827eb6551f36fb.json",
 					"name" : "IRsender",
 					"projectIndex" : 0
 				},
@@ -120,8 +120,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/esadev/projects/Project/IRsender/build",
-		"source" : "/home/esadev/projects/Project/IRsender"
+		"build" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender/build",
+		"source" : "/home/esadev/Documents/GitHub/2PlayerController/IRsender"
 	},
 	"version" : 
 	{

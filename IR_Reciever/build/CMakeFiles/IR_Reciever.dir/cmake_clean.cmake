@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   ".lst"
-  "CMakeFiles/IR_Reciever.dir/src/main.cpp.obj"
+  "CMakeFiles/IR_Reciever.dir/src/IRprotocol.cpp.obj"
   "IR_Reciever.eeprom"
   "IR_Reciever.elf"
   "IR_Reciever.elf.pdb"

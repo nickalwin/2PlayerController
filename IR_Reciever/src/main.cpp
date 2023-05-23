@@ -52,12 +52,11 @@
 #define STATE
 
 //-------------------------------------------------------------------------------------
-
 // we will store up to 100 pulse pairs (this is -a lot-)
 uint16_t pulses[NUMPULSES][2];  // pair is high and low pulse 
 uint8_t currentpulse = 0; // index for pulses we're storing
 
-#include "ircodes.h"
+#include "IRReceiveCodes.h"
 int listenForIR(void);
 boolean IRcompare(int numpulses, int Signal[], int refsize);
 unsigned long testRects(uint16_t color);
@@ -67,11 +66,20 @@ unsigned long testText();
 bool show_state(void);
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+
 //--------------------------------------------------
 int main(int argc, char const *argv[])
 {
   Serial.begin(9600);
   Serial.println("Ready to decode IR!");
+
+  //--------------------------------------------------
+  // timer
+  TCNT1 = 0;
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCCR1B |= (1 << CS12) | (1 << CS10);
+  TIMSK1 |= (1 << TOIE1);
 
   //----------------------------------------------------------------
   sei();				// enable global interrupts
@@ -94,14 +102,30 @@ int main(int argc, char const *argv[])
     int numberpulses;
     numberpulses = listenForIR();
 
-    Serial.println(" ");
+      // print it in a 'array' format
+  Serial.println("int IRsignal[] = {");
+  Serial.println("// ON, OFF ");
+  for (uint8_t i = 0; i < currentpulse-1; i++) {
+    //Serial.print("\t"); // tab
+    Serial.print("pulseIR(");
+    Serial.print(pulses[i][1] * RESOLUTION , DEC);
+    Serial.print(");");
+    Serial.println("");
+    //Serial.print("\t");
+    Serial.print("delayMicroseconds(");
+    Serial.print(pulses[i+1][0] * RESOLUTION , DEC);
+    Serial.println(");");
+  }
+  //Serial.print("\t"); // tab
+  Serial.print("pulseIR(");
+  Serial.print(pulses[currentpulse-1][1] * RESOLUTION, DEC);
+  Serial.print(");");
 
     if (IRcompare(numberpulses, Boven,sizeof(Boven)/4)) {
       Serial.println("Boven");
 				tft.setCursor(0, 150);
 				tft.setTextSize(2);
   			tft.println("Boven");
-        _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK);               
     }
       if (IRcompare(numberpulses, Rechts,sizeof(Rechts)/4)) {
@@ -109,7 +133,6 @@ int main(int argc, char const *argv[])
 				tft.setCursor(150, 150);
 				tft.setTextSize(2);
   			tft.println("Rechts");
-        _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK);               
     }
       if (IRcompare(numberpulses, Links,sizeof(Links)/4)) {
@@ -117,7 +140,6 @@ int main(int argc, char const *argv[])
 				tft.setCursor(100, 10);
 				tft.setTextSize(2);
   			tft.println("Links");
-        _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK);               
     }
       if (IRcompare(numberpulses, Onder,sizeof(Onder)/4)) {
@@ -125,13 +147,16 @@ int main(int argc, char const *argv[])
 				tft.setCursor(100, 290);
 				tft.setTextSize(2);
   			tft.println("Onder");
-        _delay_ms(20);
         tft.fillScreen(ILI9341_BLACK); 
     }
-    
-    _delay_ms(20);
+      if (IRcompare(numberpulses, RemoteCHMinus,sizeof(RemoteCHMinus)/4)) {
+      Serial.println("RemoteCHMinus");
+				tft.setCursor(100, 290);
+				tft.setTextSize(2);
+  			tft.println("RemoteCHMinus");
+        tft.fillScreen(ILI9341_BLACK); 
+    }
   }
-  
 }
 
 //KGO: added size of compare sample. Only compare the minimum of the two
@@ -203,6 +228,18 @@ int listenForIR(void) {
        highpulse++;
       //  delayMicroseconds(RESOLUTION);
 
+      //timer
+      TCNT1 = 0;
+      TCCR1A = 0;
+      TCCR1B = 0;
+      TCCR1B |= (1 << CS12) | (1 << CS10);
+      TIMSK1 |= (1 << TOIE1);
+      sei();
+      while (TCNT1 < (RESOLUTION/1000))
+      {
+        //doe niks
+      }
+      
        // If the pulse is too long, we 'timed out' - either nothing
        // was received or the code is finished, so print what
        // we've grabbed so far, and then reset
@@ -220,6 +257,20 @@ int listenForIR(void) {
        // pin is still LOW
        lowpulse++;
       //  delayMicroseconds(RESOLUTION);
+
+      //timer
+      TCNT1 = 0;
+      TCCR1A = 0;
+      TCCR1B = 0;
+      TCCR1B |= (1 << CS12) | (1 << CS10);
+      TIMSK1 |= (1 << TOIE1);
+      sei();
+      while (TCNT1 < (RESOLUTION/1000))
+      {
+        //doe niks
+      }
+
+
         // KGO: Added check for end of receive buffer
         if (((lowpulse >= MAXPULSE)  && (currentpulse != 0))|| currentpulse == NUMPULSES) {
          return currentpulse;
@@ -238,13 +289,34 @@ int listenForIR(void) {
 // methodes om te helpen ----------------------------------------------------------------------------------
 
 // void printpulses(void) {
-//   Serial.println("\n\r\n\rReceived: \n\rOFF \tON");
-//   for (uint8_t i = 0; i < currentpulse; i++) {
-//     Serial.print(pulses[i][0] * RESOLUTION, DEC);
-//     Serial.print(" usec, ");
-//     Serial.print(pulses[i][1] * RESOLUTION, DEC);
-//     Serial.println(" usec");
-//   }
+  // Serial.println("\n\r\n\rReceived: \n\rOFF \tON");
+  // for (uint8_t i = 0; i < currentpulse; i++) {
+  //   Serial.print(pulses[i][0] * RESOLUTION, DEC);
+  //   Serial.print(" usec, ");
+  //   Serial.print(pulses[i][1] * RESOLUTION, DEC);
+  //   Serial.println(" usec");
+  // }
+
+  // print it in a 'array' format
+  // Serial.println("int IRsignal[] = {");
+  // Serial.println("// ON, OFF ");
+  // for (uint8_t i = 0; i < currentpulse-1; i++) {
+  //   //Serial.print("\t"); // tab
+  //   Serial.print("pulseIR(");
+  //   Serial.print(pulses[i][1] * RESOLUTION , DEC);
+  //   Serial.print(");");
+  //   Serial.println("");
+  //   //Serial.print("\t");
+  //   Serial.print("delayMicroseconds(");
+  //   Serial.print(pulses[i+1][0] * RESOLUTION , DEC);
+  //   Serial.println(");");
+ 
+  // }
+  // //Serial.print("\t"); // tab
+  // Serial.print("pulseIR(");
+  // Serial.print(pulses[currentpulse-1][1] * RESOLUTION, DEC);
+  // Serial.print(");");
+
   
 //   // print it in a 'array' format
 //   Serial.println("int IRsignal[] = {");
