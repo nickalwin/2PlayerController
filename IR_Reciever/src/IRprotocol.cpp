@@ -9,8 +9,8 @@
 #include <avr/interrupt.h>
 #include <Nunchuk.h>
 
-#define IRpin_PIN      PIND
-#define IRpin          2
+#define IRpin_PIN PORTD6
+#define IRpin 2
 #define MAXPULSE 65000
 #define NUMPULSES 50
 #define RESOLUTION 20 
@@ -28,6 +28,7 @@ void SendPlayCode();
 void sendlinksboven();
 void sendMiddenBoven();
 void sendRechtsBoven();
+void initTimer0();
 // voor test mogelijkheden
 bool algeweest = false;
 bool algeweest2 = false;
@@ -57,11 +58,8 @@ bool show_state(void);
 int main(int argc, char const *argv[])
 {
     //--------------------------------------------------
-    // timer
-    TCCR1A = 0;
-    TCCR1B = 0;
-    TCCR1B |= (1 << CS12) | (1 << CS10);
-    TIMSK1 |= (1 << TOIE1);
+    // timer initialisatie
+    initTimer0();
     //----------------------------------------------------------------
 
     sei();				// enable global interrupts
@@ -80,10 +78,10 @@ int main(int argc, char const *argv[])
       Serial.flush();
     }
 
-
     while (1)
     {
       int numberpulses;
+      currentpulse = 0;
       numberpulses = listenForIR();
 
       int firstpulse;
@@ -150,8 +148,8 @@ int main(int argc, char const *argv[])
 }
 
 void timer(int miliseconds){
-    TCNT1 = 0;
-    while (TCNT1 < (miliseconds))
+    TCNT0 = 0;
+    while (TCNT0 < (miliseconds))
     {
         //doe niks
     }
@@ -165,9 +163,9 @@ void pulseIR(long microsecs) {
   {
     while (microsecs > 0) {
     // 38 kHz
-    DDRD |= (1 << IRledPin);  // set the LED on
+    DDRD |= (1 << IRpin_PIN);  // set the LED on
     timer(10);  
-    DDRD &= ~(1 << IRledPin);  // set the LED off
+    DDRD &= ~(1 << IRpin_PIN);  // set the LED off
     timer(10);          
  
     // niet aankomen
@@ -176,9 +174,9 @@ void pulseIR(long microsecs) {
   } else if (!is38khz) {
       while (microsecs > 0) {
       // 56 kHz 
-      DDRD |= (1 << IRledPin);  // set the LED on
+      DDRD |= (1 << IRpin_PIN);  // set the LED on
       timer(6);         
-      DDRD &= ~(1 << IRledPin);  // set the LED off
+      DDRD &= ~(1 << IRpin_PIN);  // set the LED off
       timer(6);        
  
       // niet aankomen
@@ -188,11 +186,20 @@ void pulseIR(long microsecs) {
     sei();  
 }
 
-int listenForIR(void) {
-  currentpulse = 0;
+// Timer0 initialisatie
+void initTimer0() {
+  TCCR0A = 0;  // Zet TCCR0A-register op 0 (geen speciale instellingen)
+  TCCR0B = 0;  // Zet TCCR0B-register op 0 (geen speciale instellingen)
   
-  while (1) {
-    uint16_t highpulse, lowpulse;  // temporary storage timing
+  // Stel de prescaler in op 64
+  TCCR0B |= (1 << CS01) | (1 << CS00);  // Bits CS01 en CS00 op 1
+  
+  // Enable overflow interrupt (optioneel)
+  TIMSK0 |= (1 << TOIE0);  // Bit TOIE0 op 1 voor overflow interrupt
+}
+
+int listenForIR(void) {
+      uint16_t highpulse, lowpulse;  // temporary storage timing
     highpulse = lowpulse = 0; // start out with no pulse length
   
     //  while (digitalRead(IRpin)) { // this is too slow!
@@ -232,5 +239,4 @@ int listenForIR(void) {
 
     // we read one high-low pulse successfully, continue!
     currentpulse++;
-  }
 }
