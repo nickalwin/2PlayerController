@@ -113,41 +113,7 @@ void menu()
 
 	// wait for button press
 	while (Nunchuk.getState(NUNCHUK_ADDRESS))
-	{
-		//set backlight to 50% brightness on DDRB pin 5 without analogwrite
-		DDRB |= (1 << 5);
-		PORTB |= (1 << 5);
-		// timer
-		TCNT1 = 0;
-		TCCR1A = 0;
-		TCCR1B = 0;
-		TCCR1B |= (1 << CS12) | (1 << CS10);
-		TIMSK1 |= (1 << TOIE1);
-		sei();
-		while (TCNT1 < 250)
-		{
-			// do nothing
-		}
-		// turn off backlight
-		PORTB &= ~(1 << 5);
-		// 20% brightness
-		TCNT1 = 0;
-		TCCR1A = 0;
-		TCCR1B = 0;
-		TCCR1B |= (1 << CS12);
-		TIMSK1 |= (1 << TOIE1);
-		sei();
-		while (TCNT1 < 250)
-		{
-			// do nothing
-		}
-		// turn off backlight
-		PORTB &= ~(1 << 5);
-
-
-
-
-		
+	{	
 		if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 		{
 			if (option == 0)
