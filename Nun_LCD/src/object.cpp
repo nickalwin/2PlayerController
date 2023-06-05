@@ -343,11 +343,19 @@ void game()
 		{
 			// do nothing
 		}
-		if (Nunchuk.getState(NUNCHUK_ADDRESS))
+		//stop timer
+		TCCR1B = 0;
+		while (Nunchuk.getState(NUNCHUK_ADDRESS))
 		{
 			if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 			{
-				menu();
+				while (Nunchuk.getState(NUNCHUK_ADDRESS))
+				{
+					if (Nunchuk.state.z_button == 0 && Nunchuk.state.c_button == 0)
+					{
+						menu();
+					}
+				}
 			}
 		}
 	}
