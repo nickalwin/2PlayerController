@@ -57,10 +57,11 @@ constexpr uint8_t disp[] = {
 	// declare change score
 	void change_score(int8_t score);
 
-	//player color
-	int8_t player_color = 0;
 	//array with colors
 	uint16_t colors[7] = {ILI9341_RED, ILI9341_BLUE, ILI9341_GREEN, ILI9341_YELLOW, ILI9341_CYAN, ILI9341_MAGENTA, ILI9341_WHITE};
+	//player color
+	int8_t player_color = 0;
+	int8_t player2_color = random(0, ((sizeof(colors)/2)-1));
 
 int main(int argc, char const *argv[])
 {
@@ -74,6 +75,13 @@ int main(int argc, char const *argv[])
 		Serial.println("******** No nunchuk found");
 		Serial.flush();
 		return (1);
+	}
+	//clear score board
+	change_score(7);
+	//make sure player 2 has a different color than player 1
+	while (player2_color == player_color)
+	{
+		player2_color = random(0, ((sizeof(colors)/2)-1));
 	}
 	menu();
 }
@@ -199,6 +207,8 @@ void game()
 				{
 					// do nothing
 				}
+				//stop timer
+				TCCR1B = 0;
 				if (richting == 0 || richting == 2)
 				{
 					tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
