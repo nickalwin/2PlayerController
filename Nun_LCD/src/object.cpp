@@ -31,6 +31,7 @@ bool show_state(void);
 void menu();
 void game();
 void highscores();
+void settings();
 
 const unsigned char SLAVE_ADDRESS = 0x42;
 void init_twi();
@@ -47,7 +48,19 @@ constexpr uint8_t disp[] = {
 	0xFF,		// shows nothing
 };
 
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+	// stappen voor LCD
+	Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+	uint16_t w = tft.width(); // tft size
+	uint16_t h = tft.height();
+	
+	int8_t score; //score
+	// declare change score
+	void change_score(int8_t score);
+
+	//player color
+	int8_t player_color = 0;
+	//array with colors
+	uint16_t colors[7] = {ILI9341_RED, ILI9341_BLUE, ILI9341_GREEN, ILI9341_YELLOW, ILI9341_CYAN, ILI9341_MAGENTA, ILI9341_WHITE};
 
 int main(int argc, char const *argv[])
 {
@@ -56,14 +69,6 @@ int main(int argc, char const *argv[])
 	Wire.begin();
 	Serial.begin(9600);
 
-	// stappen voor LCD
-	uint16_t w = tft.width(); // tft size
-	uint16_t h = tft.height();
-
-	// declare change score
-	void change_score(int8_t score);
-	int8_t score = 0;
-
 	if (!Nunchuk.begin(NUNCHUK_ADDRESS))
 	{
 		Serial.println("******** No nunchuk found");
@@ -71,6 +76,124 @@ int main(int argc, char const *argv[])
 		return (1);
 	}
 	menu();
+}
+
+void menu()
+{
+	// option
+	int8_t option = 0;
+
+	// start screen
+	tft.fillScreen(ILI9341_BLACK);
+	tft.setCursor(0, 0);
+	tft.setTextColor(colors[player_color]);
+	tft.setTextSize(3);
+	tft.println("Tron");
+	tft.setCursor(0, 50);
+	tft.setTextSize(2);
+	tft.setTextColor(ILI9341_WHITE);
+	tft.println("Press C & Z to start");
+	// add 3 options to select from with arrow
+	tft.setCursor(20, 100);
+	tft.setTextSize(2);
+	tft.println("1. Start");
+	tft.setCursor(20, 150);
+	tft.println("2. Highscores");
+	tft.setCursor(20, 200);
+	tft.println("3. Settings");
+
+	// draw triangle to select option
+	tft.fillTriangle(0, 100, 0, 130, 20, 115, colors[player_color]);
+
+	if (!Nunchuk.begin(NUNCHUK_ADDRESS))
+	{
+		Serial.println("******** No nunchuk found");
+		Serial.flush();
+	}
+
+	// wait for button press
+	while (Nunchuk.getState(NUNCHUK_ADDRESS))
+	{
+		//set backlight to 50% brightness on DDRB pin 5 without analogwrite
+		DDRB |= (1 << 5);
+		PORTB |= (1 << 5);
+		// timer
+		TCNT1 = 0;
+		TCCR1A = 0;
+		TCCR1B = 0;
+		TCCR1B |= (1 << CS12) | (1 << CS10);
+		TIMSK1 |= (1 << TOIE1);
+		sei();
+		while (TCNT1 < 250)
+		{
+			// do nothing
+		}
+		// turn off backlight
+		PORTB &= ~(1 << 5);
+		// 20% brightness
+		TCNT1 = 0;
+		TCCR1A = 0;
+		TCCR1B = 0;
+		TCCR1B |= (1 << CS12);
+		TIMSK1 |= (1 << TOIE1);
+		sei();
+		while (TCNT1 < 250)
+		{
+			// do nothing
+		}
+		// turn off backlight
+		PORTB &= ~(1 << 5);
+
+
+
+
+		
+		if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
+		{
+			if (option == 0)
+				game();
+			if (option == 1)
+				highscores();
+			if (option == 2)
+				settings();
+
+			break;
+		}
+		// move triangle up
+		else if (Nunchuk.state.joy_y_axis == 255 && option != 0)
+		{
+			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), ILI9341_BLACK);
+			option--;
+			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), colors[player_color]);
+
+			while (Nunchuk.getState(NUNCHUK_ADDRESS))
+			{
+				if (Nunchuk.state.joy_y_axis < 200)
+				{
+					break;
+				}
+			}
+		}
+		// move triangle down
+		else if (Nunchuk.state.joy_y_axis == 00 && option != 2)
+		{
+			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), ILI9341_BLACK);
+			option++;
+			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), colors[player_color]);
+
+			while (Nunchuk.getState(NUNCHUK_ADDRESS))
+			{
+				if (Nunchuk.state.joy_y_axis > 50)
+				{
+					break;
+				}
+			}
+		}
+	}
+}
+void game()
+{
+	score = 0;
 	while (score < 5)
 	{
 		int alive = 1;
@@ -92,11 +215,11 @@ int main(int argc, char const *argv[])
 			{
 				if (richting == 0 || richting == 2)
 				{
-					tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, 0xf800);
+					tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, colors[player_color]);
 				}
 				else if (richting == 1 || richting == 3)
 				{
-					tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, 0xf800);
+					tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, colors[player_color]);
 				}
 
 				// timer
@@ -123,7 +246,7 @@ int main(int argc, char const *argv[])
 					XMotor += 1;
 					lijn[0][teller] = XMotor;
 					lijn[1][teller] = YMotor + 3;
-					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, 0xf800);
+					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, colors[player_color]);
 					teller++;
 					if (teller == 128)
 					{
@@ -136,7 +259,7 @@ int main(int argc, char const *argv[])
 					XMotor -= 1;
 					lijn[0][teller] = XMotor + 10;
 					lijn[1][teller] = YMotor + 3;
-					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, 0xf800);
+					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, colors[player_color]);
 					teller++;
 					if (teller == 128)
 					{
@@ -149,7 +272,7 @@ int main(int argc, char const *argv[])
 					YMotor -= 1;
 					lijn[0][teller] = XMotor + 3;
 					lijn[1][teller] = YMotor + 10;
-					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, 0xf800);
+					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, colors[player_color]);
 					teller++;
 					if (teller == 128)
 					{
@@ -162,7 +285,7 @@ int main(int argc, char const *argv[])
 					YMotor += 1;
 					lijn[0][teller] = XMotor + 3;
 					lijn[1][teller] = YMotor;
-					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, 0xf800);
+					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, colors[player_color]);
 					teller++;
 					if (teller == 128)
 					{
@@ -258,90 +381,10 @@ int main(int argc, char const *argv[])
 		{
 			if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 			{
-				break;
+				menu();
 			}
 		}
 	}
-}
-
-void menu()
-{
-	// option
-	int8_t option = 0;
-
-	// start screen
-	tft.fillScreen(ILI9341_BLACK);
-	tft.setCursor(0, 0);
-	tft.setTextColor(ILI9341_WHITE);
-	tft.setTextSize(3);
-	tft.println("Tron");
-	tft.setCursor(0, 50);
-	tft.setTextSize(2);
-	tft.println("Press C & Z to start");
-	// add 3 options to select from with arrow
-	tft.setCursor(20, 100);
-	tft.setTextSize(2);
-	tft.println("1. Start");
-	tft.setCursor(20, 150);
-	tft.println("2. Highscores");
-	tft.setCursor(20, 200);
-	tft.println("3. Settings");
-
-	// draw triangle to select option
-	tft.fillTriangle(0, 100, 0, 130, 20, 115, ILI9341_WHITE);
-
-	if (!Nunchuk.begin(NUNCHUK_ADDRESS))
-	{
-		Serial.println("******** No nunchuk found");
-		Serial.flush();
-	}
-
-	// wait for button press
-	while (Nunchuk.getState(NUNCHUK_ADDRESS))
-	{
-		if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
-		{
-			if (option == 0)
-				break;
-			if (option == 1)
-				highscores();
-
-			break;
-		}
-		// move triangle up
-		else if (Nunchuk.state.joy_y_axis == 255 && option != 0)
-		{
-			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), ILI9341_BLACK);
-			option--;
-			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), ILI9341_WHITE);
-
-			while (Nunchuk.getState(NUNCHUK_ADDRESS))
-			{
-				if (Nunchuk.state.joy_y_axis < 200)
-				{
-					break;
-				}
-			}
-		}
-		// move triangle down
-		else if (Nunchuk.state.joy_y_axis == 00 && option != 2)
-		{
-			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), ILI9341_BLACK);
-			option++;
-			tft.fillTriangle(0, 100 + (option * 50), 0, 130 + (option * 50), 20, 115 + (option * 50), ILI9341_WHITE);
-
-			while (Nunchuk.getState(NUNCHUK_ADDRESS))
-			{
-				if (Nunchuk.state.joy_y_axis > 50)
-				{
-					break;
-				}
-			}
-		}
-	}
-}
-void game()
-{
 }
 void highscores()
 {
@@ -386,6 +429,82 @@ void highscores()
 					}
 				}
 			}
+		}
+	}
+}
+
+void settings(){
+	//screen to select color of the player
+	tft.fillScreen(ILI9341_BLACK);
+	tft.setCursor(0, 0);
+	tft.setTextColor(ILI9341_WHITE);
+	tft.setTextSize(3);
+	tft.println("Settings");
+	tft.setCursor(0, 50);
+	tft.setTextSize(2);
+	tft.println("Press C & Z to select");
+	//for loop to show all colors
+	for (int i = 0; i < (sizeof(colors)/2); i++)
+	{
+		tft.setCursor(50, 108+(i*18));
+		tft.setTextColor(colors[i]);
+		tft.println("select color");
+	}
+
+	// draw triangle to select option
+	tft.fillTriangle(0, 100, 0, 130, 20, 115, colors[player_color]);
+
+	if (!Nunchuk.begin(NUNCHUK_ADDRESS))
+	{
+		Serial.println("******** No nunchuk found");
+		Serial.flush();
+	}
+
+	// wait for button press
+	while (Nunchuk.getState(NUNCHUK_ADDRESS))
+	{
+		if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
+		{
+			
+		}
+		// move triangle up
+		else if (Nunchuk.state.joy_y_axis == 255 && player_color != 0)
+		{
+			tft.fillTriangle(0, 100 + (player_color * 18), 0, 130 + (player_color * 18), 20, 115 + (player_color * 18), ILI9341_BLACK);
+			player_color--;
+			tft.fillTriangle(0, 100 + (player_color * 18), 0, 130 + (player_color * 18), 20, 115 + (player_color * 18), colors[player_color]);
+
+			while (Nunchuk.getState(NUNCHUK_ADDRESS))
+			{
+				if (Nunchuk.state.joy_y_axis < 200)
+				{
+					break;
+				}
+			}
+		}
+		// move triangle down
+		else if (Nunchuk.state.joy_y_axis == 00 && player_color != (sizeof(colors)/2)-1)
+		{
+			tft.fillTriangle(0, 100 + (player_color * 18), 0, 130 + (player_color * 18), 20, 115 + (player_color * 18), ILI9341_BLACK);
+			player_color++;
+			tft.fillTriangle(0, 100 + (player_color * 18), 0, 130 + (player_color * 18), 20, 115 + (player_color * 18), colors[player_color]);
+
+			while (Nunchuk.getState(NUNCHUK_ADDRESS))
+			{
+				if (Nunchuk.state.joy_y_axis > 50)
+				{
+					break;
+				}
+			}
+		}
+		// wait for button press
+		while (Nunchuk.getState(NUNCHUK_ADDRESS))
+		{
+			if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
+			{
+				menu();
+			}
+			break;
 		}
 	}
 }
