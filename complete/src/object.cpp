@@ -18,7 +18,42 @@
 #define BAUDRATE 9600
 #define CHUNKSIZE 32
 #define BUFFERLEN 256
+// variable IR
+void sendIR(long int direction[]);
+int IRledPin =  6;    
+bool is38khz =true; // false is 56 khz true is 38 khz
 
+volatile uint16_t highCounter = 0;
+volatile uint16_t lowCounter = 0;
+volatile uint32_t counter = 0;
+volatile uint32_t bitarraycounter = 0;
+volatile bool fullbit = false;
+volatile bool validbit = false;
+int pulsearray[16];
+int bitarray[16];
+
+uint16_t pulseir;
+uint16_t zerotimer;
+uint16_t onetimer;
+uint8_t minzeropulse;
+uint8_t maxzeropulse;
+uint8_t minonepulse;
+uint8_t maxonepulse;
+void timer(uint16_t microseconds);
+// functies IR
+void convertArray();
+void printbit();
+void ReadNunchuk();
+void compareBit();
+void initIRpins();
+
+void SendLeftCode();
+void SendRightCode();
+void SendBottomCode();
+void SendTopCode();
+void sendTestCode();
+
+void PulseIR();
 // defines voor LCD
 #define TFT_DC 9
 #define TFT_CS 10
@@ -75,14 +110,188 @@ int main(int argc, char const *argv[])
 	Wire.begin();
 	Serial.begin(9600);
 
+	bitarraycounter++;
+
 	if (!Nunchuk.begin(NUNCHUK_ADDRESS))
 	{
 		Serial.println("******** No nunchuk found");
 		Serial.flush();
 		return (1);
 	}
+	if (is38khz)
+    {
+        Serial.println("38khz");
+        pulseir = 1000;
+        zerotimer = 2500;
+        onetimer = 5000;
+        minzeropulse = 10;
+        maxzeropulse = 17;
+        minonepulse = 18;
+        maxonepulse = 25;
+    }
+    else
+    {
+        Serial.println("56khz");
+        pulseir = 1500;
+        zerotimer = 4000;
+        onetimer = 8000;
+        minzeropulse = 7;
+        maxzeropulse = 11;
+        minonepulse = 12;
+        maxonepulse = 16;
+    }
 	
 	menu();
+}
+
+ISR(INT0_vect)
+{
+    if (PIND & (1 << PD2))
+    {   if(TCNT1 > 2000){
+            bitarraycounter = 0;
+        }
+        else
+        {
+            pulsearray[bitarraycounter] = TCNT1;
+            bitarraycounter++;
+        }
+        TCNT1 = 0;
+        if (bitarraycounter == 16)
+        {
+            fullbit = true;
+        }
+    }
+    else
+    {
+        // Falling edge
+    }
+}
+
+void initIRpins(){
+	    // Configure INT0 pin as input
+    DDRD &= ~(1 << DDD2);
+
+    // Enable external interrupt 0 on any change
+    EICRA |= (1 << ISC00);
+
+    // Enable external interrupt 0
+    EIMSK |= (1 << INT0);
+
+
+    // ------------------------------------------------------------------------------------------
+    // init timer 1
+    TCCR1B = (1 << CS10) | (1 << CS12);  // Set prescaler to 1024
+    TCNT1 = 0;
+
+    //-------------------------------------------------------------------------------------------
+    // init timer 2
+    TCCR2B = (1 << CS10) | (1 << CS12);
+    TCNT2 = 0;
+}
+
+void convertArray(){
+    if (fullbit)
+    {
+        for (uint16_t i = 0; i < (sizeof(pulsearray)/2); i++)
+        {
+            if (pulsearray[i] >= minzeropulse && pulsearray[i] <= maxzeropulse)
+            {
+                bitarray[i] = 0;
+            }   else if(pulsearray[i] >= minonepulse && pulsearray[i] <= maxonepulse)
+            {
+                bitarray[i] = 1;
+            }
+            pulsearray[i] = 0;
+        }
+        if ((sizeof(bitarray)/2) == 16)
+        {
+            validbit = true;
+        }
+    }
+}
+
+int compareArray(int arr1[], int arr2[], int size) {
+    for (int i = 0; i < size; i++) {
+        if (arr1[i] != arr2[i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void printbit(){
+    if (validbit)
+    {    
+        compareBit();
+
+        validbit = false;
+        fullbit = false;
+    }   
+}
+
+void pulseIR(long microsecs) {
+ 
+  cli();  
+ 
+  if (is38khz)
+  {
+    while (microsecs > 0) {
+      // 38 kHz
+      PORTD |= (1 << IRledPin);  // duurt 3 microseconds
+      timer(10);       
+      PORTD &= ~(1 << IRledPin); // duurt 3 microseconds     
+      timer(10);
+      // niet aankomen
+      microsecs -= 26; 
+    }
+  } else if (!is38khz) {
+      while (microsecs > 0) {
+      // 56 kHz 
+      PORTD |= (1 << IRledPin);  // duurt 3 microseconds        
+      timer(6);
+      PORTD &= ~(1 << IRledPin);  
+      timer(6);     
+      // niet aankomen
+      microsecs -= 26;
+    }
+  }
+    sei();  
+}
+
+void timer(uint16_t microseconds) {
+    //timer for delays
+    microseconds = (microseconds / 64);
+
+    TCNT2 = 0;
+    while (TCNT2 < microseconds)
+    {
+        //doe niks
+    }
+}
+
+int topbit[]    {1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,1};
+int bottombit[] {0,0,1,1,0,0,1,1,1,1,0,0,1,1,0,0};
+int rightbit[]  {0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1};
+int leftbit[]   {1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0};
+
+void compareBit()
+{
+    if (compareArray(bitarray,topbit,16))
+    {
+        Serial.println("Receiver: top");
+    }
+    else if(compareArray(bitarray,bottombit,16))
+    {
+        Serial.println("Receiver: bottom");
+    }
+    else if(compareArray(bitarray,rightbit,16))
+    {
+        Serial.println("Receiver: right");
+    }
+    else if(compareArray(bitarray,leftbit,16))
+    {
+        Serial.println("Receiver: left");
+    }
 }
 
 void menu()
@@ -257,6 +466,7 @@ void game()
 						teller = 0;
 					}
 					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, ILI9341_BLACK);
+					SendRightCode();
 				}
 				if (richting == 3)
 				{
@@ -270,6 +480,7 @@ void game()
 						teller = 0;
 					}
 					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, ILI9341_BLACK);
+					SendLeftCode();
 				}
 				if (richting == 0)
 				{
@@ -283,6 +494,7 @@ void game()
 						teller = 0;
 					}
 					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, ILI9341_BLACK);
+					SendTopCode();
 				}
 				if (richting == 2)
 				{
@@ -296,6 +508,7 @@ void game()
 						teller = 0;
 					}
 					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, ILI9341_BLACK);
+					SendBottomCode();
 				}
 
 				if (Nunchuk.state.joy_x_axis == 00 && richting != 1)
@@ -412,25 +625,25 @@ void game()
 					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
 				}
 
-				if (Nunchuk.state.joy_x_axis == 00 && richting2 != 1)
+				if (compareArray(bitarray,rightbit,16) && richting2 != 1)
 				{
 					if (richting2 != 3)
 						XMotor2 -= 10;
 					richting2 = 3;
 				}
-				else if (Nunchuk.state.joy_x_axis == 255 && richting2 != 3)
+				else if (compareArray(bitarray,leftbit,16) && richting2 != 3)
 				{
 					if (richting2 != 1)
 						XMotor2 += 5;
 					richting2 = 1;
 				}
-				else if (Nunchuk.state.joy_y_axis == 255 && richting2 != 2)
+				else if (compareArray(bitarray,bottombit,16) && richting2 != 2)
 				{
 					if (richting2 != 0)
 						YMotor2 -= 10;
 					richting2 = 0;
 				}
-				else if (Nunchuk.state.joy_y_axis == 00 && richting2 != 0)
+				else if (compareArray(bitarray,topbit,16) && richting2 != 0)
 				{
 					if (richting2 != 2)
 						YMotor2 += 8;
@@ -704,4 +917,110 @@ int freeRam()
 	extern int __heap_start, *__brkval;
 	int v;
 	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
+}
+
+void SendLeftCode (){
+  // startbit
+  pulseIR(9200);
+  timer(1500);
+
+  //Data
+
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0 
+  pulseIR(pulseir);    
+}
+
+void SendRightCode(){
+  // startbit
+  pulseIR(9200);
+  timer(1500);
+
+  //Data
+
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1  
+  pulseIR(pulseir);   
+}
+
+void SendBottomCode(){ 
+
+  // startbit
+  pulseIR(9200);
+  timer(1500);
+
+  //Data
+
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir);  
+}
+
+void SendTopCode(){
+
+  // startbit
+  pulseIR(9200);
+  timer(1500);
+
+  //Data
+
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(zerotimer); // 0
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir); timer(onetimer); // 1
+  pulseIR(pulseir);  
 }
