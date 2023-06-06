@@ -7,6 +7,9 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <HardwareSerial.h>
+#include <avr/eeprom.h>
+
+
 
 // defines voor nunchuck controller
 
@@ -32,6 +35,7 @@ void menu();
 void game();
 void highscores();
 void settings();
+int freeRam();
 
 const unsigned char SLAVE_ADDRESS = 0x42;
 void init_twi();
@@ -54,6 +58,7 @@ constexpr uint8_t disp[] = {
 	uint16_t h = tft.height();
 	
 	int8_t score; //score
+	int8_t score2; //score
 	// declare change score
 	void change_score(int8_t score);
 
@@ -76,6 +81,16 @@ int main(int argc, char const *argv[])
 		Serial.flush();
 		return (1);
 	}
+	
+	menu();
+}
+
+void menu()
+{
+	//free ram of heap
+	freeRam();
+	// option
+	int8_t option = 0;
 	//clear score board
 	change_score(7);
 	//make sure player 2 has a different color than player 1
@@ -83,13 +98,6 @@ int main(int argc, char const *argv[])
 	{
 		player2_color = random(0, ((sizeof(colors)/2)-1));
 	}
-	menu();
-}
-
-void menu()
-{
-	// option
-	int8_t option = 0;
 
 	// start screen
 	tft.fillScreen(ILI9341_BLACK);
@@ -167,8 +175,10 @@ void menu()
 }
 void game()
 {
+	//free ram of heap
+	freeRam();
 	score = 0;
-	while (score < 5)
+	while (score < 5 && score2 < 5)
 	{
 		int alive = 1;
 		int XMotor = 50;
@@ -177,13 +187,23 @@ void game()
 		int lijn[2][128];
 		int teller = 0;
 
+
+		int alive2 = 1;
+		int XMotor2 = 100;
+		int YMotor2 = 100;
+
+		int lijn2[2][128];
+		int teller2 = 0;
+
+
 		int8_t richting = 1;
+		int8_t richting2 = 0;
 
 		change_score(score);
 
 		tft.fillScreen(ILI9341_BLACK);					 // clear screen
 		tft.drawRoundRect(0, 0, w, h, 5, ILI9341_WHITE); // draw border
-		while (alive)
+		while (alive&&alive2)
 		{
 			if (Nunchuk.getState(NUNCHUK_ADDRESS))
 			{
@@ -194,6 +214,14 @@ void game()
 				else if (richting == 1 || richting == 3)
 				{
 					tft.fillRoundRect(XMotor, YMotor, 10, 5, 5, colors[player_color]);
+				}
+				if (richting2 == 0 || richting2 == 2)
+				{
+					tft.fillRoundRect(XMotor2, YMotor2, 5, 10, 5, colors[player2_color]);
+				}
+				else if (richting2 == 1 || richting2 == 3)
+				{
+					tft.fillRoundRect(XMotor2, YMotor2, 10, 5, 5, colors[player2_color]);
 				}
 
 				// timer
@@ -322,20 +350,141 @@ void game()
 					}
 				}
 			}
+			//player 2
+				if (richting2 == 0 || richting2 == 2)
+				{
+					tft.fillRoundRect(XMotor2, YMotor2, 5, 10, 5, ILI9341_BLACK);
+				}
+				else if (richting2 == 1 || richting2 == 3)
+				{
+					tft.fillRoundRect(XMotor2, YMotor2, 10, 5, 5, ILI9341_BLACK);
+				}
+				if (richting2 == 1)
+				{
+					XMotor2 += 1;
+					lijn2[0][teller2] = XMotor2;
+					lijn2[1][teller2] = YMotor2 + 3;
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+					teller2++;
+					if (teller2 == 128)
+					{
+						teller2 = 0;
+					}
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+				}
+				if (richting2 == 3)
+				{
+					XMotor2 -= 1;
+					lijn2[0][teller2] = XMotor2 + 10;
+					lijn2[1][teller2] = YMotor2 + 3;
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+					teller2++;
+					if (teller2 == 128)
+					{
+						teller2 = 0;
+					}
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+				}
+				if (richting2 == 0)
+				{
+					YMotor2 -= 1;
+					lijn2[0][teller2] = XMotor2 + 3;
+					lijn2[1][teller2] = YMotor2 + 10;
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+					teller2++;
+					if (teller2 == 128)
+					{
+						teller2 = 0;
+					}
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+				}
+				if (richting2 == 2)
+				{
+					YMotor2 += 1;
+					lijn2[0][teller2] = XMotor2 + 3;
+					lijn2[1][teller2] = YMotor2;
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+					teller2++;
+					if (teller2 == 128)
+					{
+						teller2 = 0;
+					}
+					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+				}
+
+				if (Nunchuk.state.joy_x_axis == 00 && richting2 != 1)
+				{
+					if (richting2 != 3)
+						XMotor2 -= 10;
+					richting2 = 3;
+				}
+				else if (Nunchuk.state.joy_x_axis == 255 && richting2 != 3)
+				{
+					if (richting2 != 1)
+						XMotor2 += 5;
+					richting2 = 1;
+				}
+				else if (Nunchuk.state.joy_y_axis == 255 && richting2 != 2)
+				{
+					if (richting2 != 0)
+						YMotor2 -= 10;
+					richting2 = 0;
+				}
+				else if (Nunchuk.state.joy_y_axis == 00 && richting2 != 0)
+				{
+					if (richting2 != 2)
+						YMotor2 += 8;
+					richting2 = 2;
+				}
+				if (XMotor2 < 0)
+				{
+					alive2 = 0;
+					XMotor2 = 0;
+				}
+				if (XMotor2 > (w - 5))
+				{
+					alive2 = 0;
+					XMotor2 = 230;
+				}
+				if (YMotor2 > (h - 3))
+				{
+					alive2 = 0;
+					YMotor2 = 310;
+				}
+				if (YMotor2 < 0)
+				{
+					alive2 = 0;
+					YMotor2 = 0;
+				}
+				for (int i = 0; i < lijn2[0][teller2]; i++)
+				{
+					if (XMotor2 == lijn2[0][i] && YMotor2 == lijn2[1][i])
+					{
+						alive2 = 0;
+					}
+				}
+			
 		}
-		score++;
+		if (!alive)
+		{
+			score++;
+		}
+		if (!alive2)
+		{
+			score2++;
+		}
 	}
 	change_score(score);
+	//write score to avr eeprom
+	eeprom_write_byte((uint8_t*)0, score);
+	eeprom_write_byte((uint8_t*)1, score2);
+
 	// create game over screen
 	tft.fillScreen(ILI9341_BLACK);
 	tft.setCursor(0, 0);
 	tft.setTextColor(ILI9341_WHITE);
 	tft.setTextSize(3);
 	tft.println("Game Over");
-	tft.setCursor(0, 50);
-	tft.setTextSize(2);
-	tft.println("Score: ");
-	tft.println(score);
 	tft.setCursor(0, 100);
 	tft.setTextSize(2);
 	tft.println("Press C & Z to continue");
@@ -357,10 +506,36 @@ void game()
 		TCCR1B = 0;
 		while (Nunchuk.getState(NUNCHUK_ADDRESS))
 		{
+			// timer
+		TCNT1 = 0;
+		TCCR1A = 0;
+		TCCR1B = 0;
+		TCCR1B |= (1 << CS12) | (1 << CS10);
+		TIMSK1 |= (1 << TOIE1);
+		sei();
+		while (TCNT1 < 250)
+		{
+			// do nothing
+		}
+		//stop timer
+		TCCR1B = 0;
 			if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 			{
 				while (Nunchuk.getState(NUNCHUK_ADDRESS))
 				{
+					// timer
+		TCNT1 = 0;
+		TCCR1A = 0;
+		TCCR1B = 0;
+		TCCR1B |= (1 << CS12) | (1 << CS10);
+		TIMSK1 |= (1 << TOIE1);
+		sei();
+		while (TCNT1 < 250)
+		{
+			// do nothing
+		}
+		//stop timer
+		TCCR1B = 0;
 					if (Nunchuk.state.z_button == 0 && Nunchuk.state.c_button == 0)
 					{
 						menu();
@@ -377,13 +552,22 @@ void highscores()
 	tft.setTextColor(ILI9341_WHITE);
 	tft.setTextSize(3);
 	tft.println("Highscores");
+	//read score from avr eeprom
+	int8_t score = eeprom_read_byte((uint8_t*)0);
+	int8_t score2 = eeprom_read_byte((uint8_t*)1);
+	//show score of player 1
 	tft.setCursor(0, 50);
 	tft.setTextSize(2);
-	tft.println("1. ");
-	tft.println("2. ");
-	tft.println("3. ");
-	tft.println("4. ");
-	tft.println("5. ");
+	tft.println("Player 1: ");
+	tft.setCursor(120, 50);
+	tft.print(score);
+	//show score of player 2
+	tft.setCursor(0, 100);
+	tft.setTextSize(2);
+	tft.println("Player 2: ");
+	tft.setCursor(120, 100);
+	tft.print(score2);
+
 	tft.setCursor(0, 200);
 	tft.setTextSize(2);
 	tft.println("Press C & Z to continue");
@@ -401,6 +585,8 @@ void highscores()
 		{
 			// do nothing
 		}
+		//stop timer
+		TCCR1B = 0;
 		while (Nunchuk.getState(NUNCHUK_ADDRESS))
 		{
 			if (Nunchuk.state.z_button == 0 && Nunchuk.state.c_button == 0)
@@ -436,8 +622,7 @@ void settings(){
 	}
 
 	// draw triangle to select option
-	tft.fillTriangle(0, 100, 0, 130, 20, 115, colors[player_color]);
-
+	tft.fillTriangle(0, 100 + (player_color * 18), 0, 130 + (player_color * 18), 20, 115 + (player_color * 18), colors[player_color]);
 	if (!Nunchuk.begin(NUNCHUK_ADDRESS))
 	{
 		Serial.println("******** No nunchuk found");
@@ -449,7 +634,7 @@ void settings(){
 	{
 		if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 		{
-			
+			menu();
 		}
 		// move triangle up
 		else if (Nunchuk.state.joy_y_axis == 255 && player_color != 0)
@@ -480,15 +665,6 @@ void settings(){
 					break;
 				}
 			}
-		}
-		// wait for button press
-		while (Nunchuk.getState(NUNCHUK_ADDRESS))
-		{
-			if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
-			{
-				menu();
-			}
-			break;
 		}
 	}
 }
@@ -521,4 +697,11 @@ void send_slave(unsigned char data) // data verzenden via TWDR register
 void stop() // stop met verzenden
 {
 	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
+}
+//create deleta ram function
+int freeRam()
+{
+	extern int __heap_start, *__brkval;
+	int v;
+	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }

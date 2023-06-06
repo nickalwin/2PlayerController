@@ -185,4 +185,6 @@ avr/interrupt.h
 -
 HardwareSerial.h
 -
+avr/eeprom.h
+-
 
