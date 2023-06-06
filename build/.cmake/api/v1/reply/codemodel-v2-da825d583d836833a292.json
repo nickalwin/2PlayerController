@@ -1,0 +1,131 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "IR_Reciever",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "IR_Reciever::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-IR_Reciever-Debug-56b0973817fa228b2664.json",
+					"name" : "IR_Reciever",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "disasm::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-disasm-Debug-a402d768558368aab52b.json",
+					"name" : "disasm",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "eeprom::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-eeprom-Debug-9406e3e1dba4d6252038.json",
+					"name" : "eeprom",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fuses::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fuses-Debug-c9c944053d9c697679d7.json",
+					"name" : "fuses",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hex::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hex-Debug-69e134e6f5f8bbc5536d.json",
+					"name" : "hex",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "size::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-size-Debug-253099b6d263ab886a82.json",
+					"name" : "size",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "strip::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-strip-Debug-380f62cc7684816ab171.json",
+					"name" : "strip",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "upload::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-upload-Debug-554368cb468d9bc65985.json",
+					"name" : "upload",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "upload_eeprom::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-upload_eeprom-Debug-bfa3516a79980dd14f91.json",
+					"name" : "upload_eeprom",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/esadev/projects/Project/IR_Reciever/build",
+		"source" : "/home/esadev/projects/Project/IR_Reciever"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 1
+	}
+}

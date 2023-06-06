@@ -1,0 +1,1 @@
+/usr/bin/avr-g++ -std=gnu++11 -fpermissive -fno-exceptions -fno-threadsafe-statics -Wno-error=narrowing -g -mmcu=atmega328p -flto -fuse-linker-plugin -Wl,--gc-sections CMakeFiles/IR_Reciever.dir/src/object.cpp.obj -o IR_Reciever.elf   -L/home/esadev/Arduino/lib  -lILI9341 -lGFX -lBusIO -lSPI -lNunchuk -lWire -lArduinoCore 
