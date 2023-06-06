@@ -56,11 +56,13 @@
 uint16_t pulses[NUMPULSES][2];  // pair is high and low pulse 
 uint8_t currentpulse = 0; // index for pulses we're storing
 
-#include "IRReceiveCodes.h"
 int listenForIR(void);
+void initpins();
+void timer(uint16_t microseconds); 
 boolean IRcompare(int numpulses, int Signal[], int refsize);
 unsigned long testRects(uint16_t color);
 unsigned long testText();
+int IRledPin =  6;  
 //--------------------------------------------------
 // prototypes
 bool show_state(void);
@@ -72,20 +74,8 @@ int main(int argc, char const *argv[])
 {
   Serial.begin(9600);
   Serial.println("Ready to decode IR!");
-
-  //--------------------------------------------------
-  // timer
-  TCNT1 = 0;
-  TCCR1A = 0;
-  TCCR1B = 0;
-  TCCR1B |= (1 << CS12) | (1 << CS10);
-  TIMSK1 |= (1 << TOIE1);
-
-  //----------------------------------------------------------------
-  sei();				// enable global interrupts
-	tft.begin();        // initialize the tft
-  Wire.begin();
-  Serial.begin(9600);			
+  initpins();
+  Wire.begin();		
 
   // stappen voor LCD
 	uint16_t w = tft.width();	// tft size
@@ -101,61 +91,9 @@ int main(int argc, char const *argv[])
   {
     int numberpulses;
     numberpulses = listenForIR();
-
-      // print it in a 'array' format
-  Serial.println("int IRsignal[] = {");
-  Serial.println("// ON, OFF ");
-  for (uint8_t i = 0; i < currentpulse-1; i++) {
-    //Serial.print("\t"); // tab
-    Serial.print("pulseIR(");
-    Serial.print(pulses[i][1] * RESOLUTION , DEC);
-    Serial.print(");");
-    Serial.println("");
-    //Serial.print("\t");
-    Serial.print("delayMicroseconds(");
-    Serial.print(pulses[i+1][0] * RESOLUTION , DEC);
-    Serial.println(");");
-  }
-  //Serial.print("\t"); // tab
-  Serial.print("pulseIR(");
-  Serial.print(pulses[currentpulse-1][1] * RESOLUTION, DEC);
-  Serial.print(");");
-
-    if (IRcompare(numberpulses, Boven,sizeof(Boven)/4)) {
-      Serial.println("Boven");
-				tft.setCursor(0, 150);
-				tft.setTextSize(2);
-  			tft.println("Boven");
-        tft.fillScreen(ILI9341_BLACK);               
-    }
-      if (IRcompare(numberpulses, Rechts,sizeof(Rechts)/4)) {
-      Serial.println("Rechts");
-				tft.setCursor(150, 150);
-				tft.setTextSize(2);
-  			tft.println("Rechts");
-        tft.fillScreen(ILI9341_BLACK);               
-    }
-      if (IRcompare(numberpulses, Links,sizeof(Links)/4)) {
-      Serial.println("Links");
-				tft.setCursor(100, 10);
-				tft.setTextSize(2);
-  			tft.println("Links");
-        tft.fillScreen(ILI9341_BLACK);               
-    }
-      if (IRcompare(numberpulses, Onder,sizeof(Onder)/4)) {
-      Serial.println("Onder");
-				tft.setCursor(100, 290);
-				tft.setTextSize(2);
-  			tft.println("Onder");
-        tft.fillScreen(ILI9341_BLACK); 
-    }
-      if (IRcompare(numberpulses, RemoteCHMinus,sizeof(RemoteCHMinus)/4)) {
-      Serial.println("RemoteCHMinus");
-				tft.setCursor(100, 290);
-				tft.setTextSize(2);
-  			tft.println("RemoteCHMinus");
-        tft.fillScreen(ILI9341_BLACK); 
-    }
+    Serial.println();
+    Serial.println("IR Begin");
+    Serial.println();
   }
 }
 
@@ -214,73 +152,65 @@ boolean IRcompare(int numpulses, int Signal[], int refsize) {
 }
 
 int listenForIR(void) {
+  // cli(); //interupts uit
+  Serial.print('.');
   currentpulse = 0;
   
   while (1) {
-    uint16_t highpulse, lowpulse;  // temporary storage timing
-    highpulse = lowpulse = 0; // start out with no pulse length
-  
-    //  while (digitalRead(IRpin)) { // this is too slow!
+    uint16_t highpulse, lowpulse;
+    highpulse = lowpulse = 0;
+    Serial.print('/');
     while (IRpin_PIN & (1 << IRpin)) {
-       // pin is still HIGH
-
-       // count off another few microseconds
-       highpulse++;
-      //  delayMicroseconds(RESOLUTION);
-
-      //timer
-      TCNT1 = 0;
-      TCCR1A = 0;
-      TCCR1B = 0;
-      TCCR1B |= (1 << CS12) | (1 << CS10);
-      TIMSK1 |= (1 << TOIE1);
-      sei();
-      while (TCNT1 < (RESOLUTION/1000))
-      {
-        //doe niks
-      }
-      
-       // If the pulse is too long, we 'timed out' - either nothing
-       // was received or the code is finished, so print what
-       // we've grabbed so far, and then reset
-       
-       // KGO: Added check for end of receive buffer
-       if (((highpulse >= MAXPULSE) && (currentpulse != 0))|| currentpulse == NUMPULSES) {
-         return currentpulse;
+      highpulse++;
+      timer(RESOLUTION); // dit is een delay van 20 microseconden
+      if (((highpulse >= MAXPULSE) && (currentpulse != 0))|| currentpulse == NUMPULSES) { // als de highpulse groter is dan 65000 en de currentpulse niet 0 is of de currentpulse is 50
+        sei(); //interupts aan
+        Serial.print(currentpulse);
+        Serial.print('!');
+        return currentpulse;
        }
     }
-    // we didn't time out so lets stash the reading
     pulses[currentpulse][0] = highpulse;
-  
-    // same as above
     while (! (IRpin_PIN & _BV(IRpin))) {
-       // pin is still LOW
        lowpulse++;
-      //  delayMicroseconds(RESOLUTION);
-
-      //timer
-      TCNT1 = 0;
-      TCCR1A = 0;
-      TCCR1B = 0;
-      TCCR1B |= (1 << CS12) | (1 << CS10);
-      TIMSK1 |= (1 << TOIE1);
-      sei();
-      while (TCNT1 < (RESOLUTION/1000))
-      {
-        //doe niks
-      }
-
-
-        // KGO: Added check for end of receive buffer
+        timer(RESOLUTION);
         if (((lowpulse >= MAXPULSE)  && (currentpulse != 0))|| currentpulse == NUMPULSES) {
-         return currentpulse;
+          sei(); //interupts aanint listenForIR(void)
+          Serial.print('!');
+          Serial.print(currentpulse);
+          return currentpulse;
        }
     }
     pulses[currentpulse][1] = lowpulse;
-
-    // we read one high-low pulse successfully, continue!
     currentpulse++;
   }
+}
+
+void initpins(){
+  // init interrupt
+  // set pin 2 to trigger an interrupt on high-to-low transitions using bitwise operator
+  EICRA |= (1 << ISC01);
+  // set external interrupt mask register to enable pin 2
+  EIMSK |= (1 << INT0);
+  // ------------------------------------------------------------------------------------------
+  // init timer 1
+  TCCR1B = (1 << CS10) | (1 << CS12);  // Set prescaler to 1024
+  TCNT1 = 0;
+  sei();
+  // ------------------------------------------------------------------------------------------
+  //init IR led IR reciever
+  DDRD &= ~(1 << IRpin); // Set pin 2 as input
+  DDRD |= (1 << IRledPin); // Set pin 6 as output
+}
+
+void timer(uint16_t microseconds) {
+    microseconds = (microseconds / 64);
+
+    TCNT1 = 0;
+    while (TCNT1 < microseconds)
+    {
+        //doe niks
+    }
 }
 
 
@@ -297,7 +227,7 @@ int listenForIR(void) {
   //   Serial.println(" usec");
   // }
 
-  // print it in a 'array' format
+  // print it in a 'array' format>
   // Serial.println("int IRsignal[] = {");
   // Serial.println("// ON, OFF ");
   // for (uint8_t i = 0; i < currentpulse-1; i++) {
@@ -310,8 +240,8 @@ int listenForIR(void) {
   //   Serial.print("delayMicroseconds(");
   //   Serial.print(pulses[i+1][0] * RESOLUTION , DEC);
   //   Serial.println(");");
- 
   // }
+
   // //Serial.print("\t"); // tab
   // Serial.print("pulseIR(");
   // Serial.print(pulses[currentpulse-1][1] * RESOLUTION, DEC);
@@ -349,11 +279,7 @@ int listenForIR(void) {
 
 //   //return micros() - start;
 //   return 0;
-// }
-
-// unsigned long testText() {
-//   tft.fillScreen(ILI9341_BLACK);
-//   //unsigned long start = micros();
+// }>icros();
 //   tft.setCursor(0, 0);
 //   tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
 //   tft.println("Hello World!");

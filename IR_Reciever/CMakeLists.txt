@@ -29,6 +29,7 @@ add_executable(${PROJECT_NAME}
 	#src/graphicstest.cpp
 	#src/nunchuk.cpp
 	#src/circle.cpp
+	# src/Test.cpp
 )
 
 # Add library

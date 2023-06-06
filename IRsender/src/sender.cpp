@@ -19,21 +19,38 @@ void SendPlayCode();
 void sendlinksboven();
 void sendMiddenBoven();
 void sendRechtsBoven();
+void SendTestCode();
 // voor test mogelijkheden
 bool algeweest = false;
 bool algeweest2 = false;
 bool algeweest3 = false;
 bool algeweest4 = false;
  
+void timer_init() {
+    TCCR1B = (1 << CS10) | (1 << CS12);  // Set prescaler to 1024
+    TCNT1 = 0;
+    sei();
+}
+void timer(uint16_t microseconds) {
+    microseconds = (microseconds / 64);
+
+    TCNT1 = 0;
+    while (TCNT1 < microseconds)
+    {
+        //doe niks
+    }
+}
+
 void setup()   {                
   // initialize the IR digital pin as an output:
-  pinMode(IRledPin, OUTPUT);      
+  pinMode(IRledPin, OUTPUT);
+  timer_init();     
 
   //timer
   TCNT1 = 0;
   TCCR1A = 0;
   TCCR1B = 0;
-  TCCR1B |= (1 << CS12) | (1 << CS10);
+  TCCR1B = (1 << CS10) | (1 << CS12);
   TIMSK1 |= (1 << TOIE1);
 
   // enable global interrupts
@@ -54,19 +71,7 @@ void setup()   {
 		Serial.flush();
 	}
 }
- 
-void timer(int microseconds){
-            TCNT1 = 0;
-            TCCR1A = 0;
-            TCCR1B = 0;
-            TCCR1B |= (1 << CS12) | (1 << CS10);
-            TIMSK1 |= (1 << TOIE1);
-            sei();
-            while (TCNT1 < (microseconds/1000))
-            {
-                //doe niks
-            }
-}
+
 
  void loop()                     
 {
@@ -77,7 +82,8 @@ void timer(int microseconds){
           if (!algeweest)
           {
             Serial.println("Sending play button");
-            SendPlayCode();
+            SendTestCode();
+            // SendPlayCode();
             algeweest=true;
             algeweest2 = false;
           }
@@ -86,7 +92,8 @@ void timer(int microseconds){
         if (!algeweest2)
         {
           Serial.println("sending linksboven");
-          sendlinksboven();
+          SendTestCode();
+          // sendlinksboven();
           algeweest2=true;
           algeweest = false;
         }
@@ -96,7 +103,8 @@ void timer(int microseconds){
         if (!algeweest3)
         {
           Serial.println("sending MiddenBoven");
-          sendMiddenBoven();
+          SendTestCode();
+          // sendMiddenBoven();
           algeweest3=true;
           algeweest4 = false;    
         }
@@ -106,7 +114,8 @@ void timer(int microseconds){
         if (!algeweest4)
         {
           Serial.println("sending RechtsBoven");
-          sendRechtsBoven();
+          SendTestCode();
+          // sendRechtsBoven();
           algeweest4 = true;
           algeweest3 = false;    
         }
@@ -115,8 +124,6 @@ void timer(int microseconds){
 }
 
 void pulseIR(long microsecs) {
-  
- 
   cli();  
  
   if (is38khz)
@@ -149,6 +156,58 @@ void pulseIR(long microsecs) {
   }
     sei();  
 }
+
+void SendTestCode() {
+
+  //start
+
+  pulseIR(9200);
+  timer(4608);
+
+  //startbit
+
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(1600); // 1
+  pulseIR(640); timer(1600); // 1
+  pulseIR(640); timer(1600); // 1
+  pulseIR(640); timer(1600); // 1
+  pulseIR(640); timer(1600); // 1
+  pulseIR(640); timer(1600); // 1
+  pulseIR(640); timer(1600); // 1
+  pulseIR(640); timer(1600); // 1
+
+  //readable bit
+
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(640); // 0
+  pulseIR(640); timer(1600); // 1
+
+  //end
+
+  timer(4608);
+  pulseIR(9200);
+
+}
  
 void SendPlayCode() {
 
@@ -159,65 +218,65 @@ void SendPlayCode() {
   pulseIR(9300);
   delayMicroseconds(4560);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(560);
+  delayMicroseconds(640);
   pulseIR(620);
-  delayMicroseconds(560);
+  delayMicroseconds(640);
   pulseIR(620);
-  delayMicroseconds(560);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(620);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1640);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1640);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1640);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(620);
-  delayMicroseconds(560);
+  delayMicroseconds(640);
   pulseIR(620);
-  delayMicroseconds(560);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(560);
+  delayMicroseconds(640);
   pulseIR(620);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(540);
+  delayMicroseconds(640);
   pulseIR(640);
-  delayMicroseconds(560);
+  delayMicroseconds(640);
   pulseIR(620);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(620);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
-  delayMicroseconds(1660);
+  delayMicroseconds(1600);
   pulseIR(640);
   delayMicroseconds(540);
   pulseIR(640);
