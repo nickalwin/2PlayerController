@@ -9,8 +9,7 @@
 #include <HardwareSerial.h>
 #include <avr/eeprom.h>
 
-
-//terug te zetten onderdelen voor na het testen----------------------------
+// terug te zetten onderdelen voor na het testen----------------------------
 //-------------------------------------------------
 //-pulsearray
 //-bitarray
@@ -19,12 +18,11 @@
 //-validbit print uit printbit halen
 //-convertarray waar validbit true wordt gezet
 
-
 //-------------------------------------------------------------------------------------
-//voor sturen van Infrarood
+// voor sturen van Infrarood
 void sendIR(long int direction[]);
-const uint8_t IRledPin =  6;    
-bool is38khz =false; // false is 56 khz true is 38 khz
+const uint8_t IRledPin = 6;
+bool is38khz = false; // false is 56 khz true is 38 khz
 
 volatile uint16_t highCounter = 0;
 volatile uint16_t lowCounter = 0;
@@ -38,17 +36,17 @@ volatile bool right = false;
 volatile bool left = false;
 volatile bool bottom = false;
 
-
-
 uint16_t pulsearray[17];
 
 uint16_t bitarray[16];
 
-const uint16_t topbit[]    {1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,1};
-const uint16_t bottombit[] {0,0,1,1,0,0,1,1,1,1,0,0,1,1,0,0};
-const uint16_t rightbit[]  {0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1};
-const uint16_t leftbit[]   {1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0};
+const uint16_t topbit[]{1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1};
+const uint16_t bottombit[]{0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0};
+const uint16_t rightbit[]{0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1};
+const uint16_t leftbit[]{1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0};
 
+uint8_t lijn[2][64];
+uint8_t lijn2[2][64];
 
 uint16_t pulseir;
 uint16_t zerotimer;
@@ -58,6 +56,7 @@ uint8_t maxzeropulse;
 uint8_t minonepulse;
 uint8_t maxonepulse;
 void SendRightCode();
+void SendLeftCode();
 void SendBottomCode();
 void SendTopCode();
 void sendTestCode();
@@ -92,8 +91,7 @@ void compareBit();
 void printbit();
 void convertArray();
 int freeRam();
-
-
+void clearArrays();
 
 const unsigned char SLAVE_ADDRESS = 0x42;
 void init_twi();
@@ -110,43 +108,45 @@ constexpr uint8_t disp[] = {
 	0xFF,		// shows nothing
 };
 
-	// stappen voor LCD
-	Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
-	uint16_t w = tft.width(); // tft size
-	uint16_t h = tft.height();
-	
-	int8_t score; //score
-	int8_t score2; //score
-	// declare change score
-	void change_score(int8_t score);
+// stappen voor LCD
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+uint16_t w = tft.width(); // tft size
+uint16_t h = tft.height();
 
-	//array with colors
-	const uint16_t colors[7] = {ILI9341_RED, ILI9341_BLUE, ILI9341_GREEN, ILI9341_YELLOW, ILI9341_CYAN, ILI9341_MAGENTA, ILI9341_WHITE};
-	//player color
-	int8_t player_color = 0;
-	int8_t player2_color = random(0, ((sizeof(colors)/2)-1));
+int8_t score;  // score
+int8_t score2; // score
+// declare change score
+void change_score(int8_t score);
+
+// array with colors
+const uint16_t colors[7] = {ILI9341_RED, ILI9341_BLUE, ILI9341_GREEN, ILI9341_YELLOW, ILI9341_CYAN, ILI9341_MAGENTA, ILI9341_WHITE};
+// player color
+int8_t player_color = 0;
+int8_t player2_color = random(0, ((sizeof(colors) / 2) - 1));
 
 ISR(INT0_vect)
 {
-    if (PIND & (1 << PD2))
-    {   if(TCNT1 > 2000){
-            bitarraycounter = 0;
-        }
-        else
-        {
-            pulsearray[bitarraycounter] = TCNT1;
-            bitarraycounter++;
-        }
-        TCNT1 = 0;
-        if (bitarraycounter == 16)
-        {
-            fullbit = true;
-        }
+	if (PIND & (1 << PD2))
+	{
+		if (TCNT1 > 2000)
+		{
+			bitarraycounter = 0;
+		}
+		else
+		{
+			pulsearray[bitarraycounter] = TCNT1;
+			bitarraycounter++;
+		}
+		TCNT1 = 0;
+		if (bitarraycounter == 16)
+		{
+			fullbit = true;
+		}
 		else
 		{
 			fullbit = false;
 		}
-    }
+	}
 }
 
 int main(int argc, char const *argv[])
@@ -155,33 +155,33 @@ int main(int argc, char const *argv[])
 	Wire.begin();
 	Serial.begin(9600);
 
-	    // Configure INT0 pin as input
-    DDRD &= ~(1 << DDD2);
+	// Configure INT0 pin as input
+	DDRD &= ~(1 << DDD2);
 
-    // Enable external interrupt 0 on any change
-    EICRA |= (1 << ISC00);
+	// Enable external interrupt 0 on any change
+	EICRA |= (1 << ISC00);
 
-    // Enable external interrupt 0
-    EIMSK |= (1 << INT0);
+	// Enable external interrupt 0
+	EIMSK |= (1 << INT0);
 
-    // ------------------------------------------------------------------------------------------
-    // init timer 0
-    TCNT0 = 0;
-    TCCR0A = 0;
-    TCCR0B = 0;
-    TCCR0B |= (1 << CS02) | (1 << CS00);
-    TIMSK0 |= (1 << TOIE0);
+	// ------------------------------------------------------------------------------------------
+	// init timer 0
+	TCNT0 = 0;
+	TCCR0A = 0;
+	TCCR0B = 0;
+	TCCR0B |= (1 << CS02) | (1 << CS00);
+	TIMSK0 |= (1 << TOIE0);
 
-    // ------------------------------------------------------------------------------------------
-    // init timer 1
-    TCCR1B = (1 << CS10) | (1 << CS12);  // Set prescaler to 1024
-    TCNT1 = 0;
+	// ------------------------------------------------------------------------------------------
+	// init timer 1
+	TCCR1B = (1 << CS10) | (1 << CS12); // Set prescaler to 1024
+	TCNT1 = 0;
 
-    //-------------------------------------------------------------------------------------------
-    // init timer 2
-    TCCR2B = (1 << CS10) | (1 << CS12);
-    TCNT2 = 0;
-    sei();
+	//-------------------------------------------------------------------------------------------
+	// init timer 2
+	TCCR2B = (1 << CS10) | (1 << CS12);
+	TCNT2 = 0;
+	sei();
 
 	if (!Nunchuk.begin(NUNCHUK_ADDRESS))
 	{
@@ -191,43 +191,43 @@ int main(int argc, char const *argv[])
 	}
 
 	if (is38khz)
-    {
-        Serial.println("38khz");
-        pulseir = 1000;
-        zerotimer = 2500;
-        onetimer = 5000;
-        minzeropulse = 7;
-        maxzeropulse = 11;
-        minonepulse = 12;
-        maxonepulse = 16;
-    }
-    else
-    {
-        Serial.println("56khz");
-        pulseir = 1500;
-        zerotimer = 4000;
-        onetimer = 8000;
-        minzeropulse = 7;
-        maxzeropulse = 11;
-        minonepulse = 12;
-        maxonepulse = 17;
-    }
-	
+	{
+		Serial.println("38khz");
+		pulseir = 1000;
+		zerotimer = 2500;
+		onetimer = 5000;
+		minzeropulse = 7;
+		maxzeropulse = 11;
+		minonepulse = 12;
+		maxonepulse = 16;
+	}
+	else
+	{
+		Serial.println("56khz");
+		pulseir = 1500;
+		zerotimer = 4000;
+		onetimer = 8000;
+		minzeropulse = 7;
+		maxzeropulse = 11;
+		minonepulse = 12;
+		maxonepulse = 17;
+	}
+
 	menu();
 }
 
 void menu()
 {
-	//free ram of heap
+	// free ram of heap
 	freeRam();
 	// option
 	int8_t option = 0;
-	//clear score board
+	// clear score board
 	change_score(7);
-	//make sure player 2 has a different color than player 1
+	// make sure player 2 has a different color than player 1
 	while (player2_color == player_color)
 	{
-		player2_color = random(0, ((sizeof(colors)/2)-1));
+		player2_color = random(0, ((sizeof(colors) / 2) - 1));
 	}
 
 	// start screen
@@ -260,7 +260,7 @@ void menu()
 
 	// wait for button press
 	while (Nunchuk.getState(NUNCHUK_ADDRESS))
-	{	
+	{
 		if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 		{
 			if (option == 0)
@@ -306,7 +306,7 @@ void menu()
 }
 void game()
 {
-	//free ram of heap
+	// free ram of heap
 	freeRam();
 	score = 0;
 	while (score < 5 && score2 < 5)
@@ -325,31 +325,32 @@ void game()
 		uint8_t lijn2[2][64];
 		uint8_t teller2 = 0;
 
-
 		uint8_t richting = 1;
 		uint8_t richting2 = 0;
+
+		clearArrays();
 
 		change_score(score);
 
 		tft.fillScreen(ILI9341_BLACK);					 // clear screen
 		tft.drawRoundRect(0, 0, w, h, 5, ILI9341_WHITE); // draw border
-		while (alive&&alive2)
+		while (alive && alive2)
 		{
 
-            // if (fullbit)
-            // {
-            //     for (uint16_t i = 0; i < (sizeof(pulsearray)/2); i++)
-            //     {
-            //         Serial.print(pulsearray[i]);
-            //         Serial.print(',');
-            //         pulsearray[i] = 0;
-            //     }
-            //     fullbit = false;
-            //     Serial.println("");
-            // }
+			// if (fullbit)
+			// {
+			//     for (uint16_t i = 0; i < (sizeof(pulsearray)/2); i++)
+			//     {
+			//         Serial.print(pulsearray[i]);
+			//         Serial.print(',');
+			//         pulsearray[i] = 0;
+			//     }
+			//     fullbit = false;
+			//     Serial.println("");
+			// }
 
-            convertArray();
-            compareBit();
+			convertArray();
+			compareBit();
 
 			if (Nunchuk.getState(NUNCHUK_ADDRESS))
 			{
@@ -370,12 +371,12 @@ void game()
 					tft.fillRoundRect(XMotor2, YMotor2, 10, 5, 5, colors[player2_color]);
 				}
 
-                // timer
-                TCNT0 = 0;
-                while (TCNT0 < 250)
-                {
-                    // do nothing
-                }
+				// timer
+				TCNT0 = 0;
+				while (TCNT0 < 250)
+				{
+					// do nothing
+				}
 				if (richting == 0 || richting == 2)
 				{
 					tft.fillRoundRect(XMotor, YMotor, 5, 10, 5, ILI9341_BLACK);
@@ -436,31 +437,63 @@ void game()
 					}
 					tft.drawLine(lijn[0][teller], lijn[1][teller], lijn[0][teller] - 1, lijn[1][teller] - 1, ILI9341_BLACK);
 				}
-
-				if (left && richting != 1)
+				if (Nunchuk.state.joy_x_axis == 00 && richting != 1)
 				{
-					if (richting != 3)
+				if (richting != 3)
+				{
 						XMotor -= 10;
-					richting = 3;
+						SendLeftCode();
+						timer(50);
+						SendLeftCode();
+						timer(50);
+						SendLeftCode();
+						timer(50);
+						richting = 3;
+					}
 				}
-				else if (right && richting != 3)
+				else if (Nunchuk.state.joy_x_axis == 255 && richting != 3)
 				{
 					if (richting != 1)
+					{
 						XMotor += 5;
-					richting = 1;
+						SendRightCode();
+						timer(50);
+						SendRightCode();
+						timer(50);
+						SendRightCode();
+						timer(50);
+						richting = 1;
+					}
 				}
-				else if (top && richting != 2)
+				else if (Nunchuk.state.joy_y_axis == 255 && richting != 2)
 				{
 					if (richting != 0)
+					{
 						YMotor -= 10;
-					richting = 0;
+						richting = 0;
+						SendTopCode();
+						timer(50);
+						SendTopCode();
+						timer(50);
+						SendTopCode();
+						timer(50);
+					}
 				}
-				else if (bottom && richting != 0)
+				else if (Nunchuk.state.joy_y_axis == 00 && richting != 0)
 				{
 					if (richting != 2)
+					{
 						YMotor += 8;
-					richting = 2;
+						richting = 2;
+						SendBottomCode();
+						timer(50);
+						SendBottomCode();
+						timer(50);
+						SendBottomCode();
+						
+					}
 				}
+
 				if (XMotor < 0)
 				{
 					alive = 0;
@@ -481,134 +514,135 @@ void game()
 					alive = 0;
 					YMotor = 0;
 				}
-				for (int i = 0; i < lijn[0][teller]; i++)
+				for (int i = 0; i < 64; i++)
 				{
 					if (XMotor == lijn[0][i] && YMotor == lijn[1][i])
 					{
 						alive = 0;
-					} else if (XMotor == lijn2[0][i] && YMotor == lijn2[1][i])
+					}
+					else if (XMotor == lijn2[0][i] && YMotor == lijn2[1][i])
 					{
 						alive = 0;
 					}
 				}
 			}
-			//player 2
-				if (richting2 == 0 || richting2 == 2)
+			// player 2
+			if (richting2 == 0 || richting2 == 2)
+			{
+				tft.fillRoundRect(XMotor2, YMotor2, 5, 10, 5, ILI9341_BLACK);
+			}
+			else if (richting2 == 1 || richting2 == 3)
+			{
+				tft.fillRoundRect(XMotor2, YMotor2, 10, 5, 5, ILI9341_BLACK);
+			}
+			if (richting2 == 1)
+			{
+				XMotor2 += 1;
+				lijn2[0][teller2] = XMotor2;
+				lijn2[1][teller2] = YMotor2 + 3;
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+				teller2++;
+				if (teller2 == 64)
 				{
-					tft.fillRoundRect(XMotor2, YMotor2, 5, 10, 5, ILI9341_BLACK);
+					teller2 = 0;
 				}
-				else if (richting2 == 1 || richting2 == 3)
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+			}
+			if (richting2 == 3)
+			{
+				XMotor2 -= 1;
+				lijn2[0][teller2] = XMotor2 + 10;
+				lijn2[1][teller2] = YMotor2 + 3;
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+				// teller2++;
+				if (teller2 == 64)
 				{
-					tft.fillRoundRect(XMotor2, YMotor2, 10, 5, 5, ILI9341_BLACK);
+					teller2 = 0;
 				}
-				if (richting2 == 1)
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+			}
+			if (richting2 == 0)
+			{
+				YMotor2 -= 1;
+				lijn2[0][teller2] = XMotor2 + 3;
+				lijn2[1][teller2] = YMotor2 + 10;
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+				teller2++;
+				if (teller2 == 64)
 				{
-					XMotor2 += 1;
-					lijn2[0][teller2] = XMotor2;
-					lijn2[1][teller2] = YMotor2 + 3;
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
-					teller2++;
-					if (teller2 == 64)
-					{
-						teller2 = 0;
-					}
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+					teller2 = 0;
 				}
-				if (richting2 == 3)
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+			}
+			if (richting2 == 2)
+			{
+				YMotor2 += 1;
+				lijn2[0][teller2] = XMotor2 + 3;
+				lijn2[1][teller2] = YMotor2;
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
+				teller2++;
+				if (teller2 == 64)
 				{
-					XMotor2 -= 1;
-					lijn2[0][teller2] = XMotor2 + 10;
-					lijn2[1][teller2] = YMotor2 + 3;
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
-					teller2++;
-					if (teller2 == 64)
-					{
-						teller2 = 0;
-					}
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+					teller2 = 0;
 				}
-				if (richting2 == 0)
-				{
-					YMotor2 -= 1;
-					lijn2[0][teller2] = XMotor2 + 3;
-					lijn2[1][teller2] = YMotor2 + 10;
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
-					teller2++;
-					if (teller2 == 64)
-					{
-						teller2 = 0;
-					}
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
-				}
-				if (richting2 == 2)
-				{
-					YMotor2 += 1;
-					lijn2[0][teller2] = XMotor2 + 3;
-					lijn2[1][teller2] = YMotor2;
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, colors[player2_color]);
-					teller2++;
-					if (teller2 == 64)
-					{
-						teller2 = 0;
-					}
-					tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
-				}
+				tft.drawLine(lijn2[0][teller2], lijn2[1][teller2], lijn2[0][teller2] - 1, lijn2[1][teller2] - 1, ILI9341_BLACK);
+			}
 
-				if (Nunchuk.state.joy_x_axis == 00 && richting2 != 1)
+				if (left && richting2 != 1)
 				{
 					if (richting2 != 3)
 						XMotor2 -= 10;
 					richting2 = 3;
 				}
-				else if (Nunchuk.state.joy_x_axis == 255 && richting2 != 3)
+				else if (right && richting2 != 3)
 				{
 					if (richting2 != 1)
 						XMotor2 += 5;
 					richting2 = 1;
 				}
-				else if (Nunchuk.state.joy_y_axis == 255 && richting2 != 2)
+				else if (top && richting2 != 2)
 				{
 					if (richting2 != 0)
 						YMotor2 -= 10;
 					richting2 = 0;
 				}
-				else if (Nunchuk.state.joy_y_axis == 00 && richting2 != 0)
+				else if (bottom && richting2 != 0)
 				{
 					if (richting2 != 2)
 						YMotor2 += 8;
 					richting2 = 2;
 				}
-				if (XMotor2 < 0)
+			if (XMotor2 < 0)
+			{
+				alive2 = 0;
+				XMotor2 = 0;
+			}
+			if (XMotor2 > (w - 5))
+			{
+				alive2 = 0;
+				XMotor2 = 230;
+			}
+			if (YMotor2 > (h - 3))
+			{
+				alive2 = 0;
+				YMotor2 = 310;
+			}
+			if (YMotor2 < 0)
+			{
+				alive2 = 0;
+				YMotor2 = 0;
+			}
+			for (int i = 0; i < 64; i++)
+			{
+				if (XMotor2 == lijn2[0][i] && YMotor2 == lijn2[1][i])
 				{
 					alive2 = 0;
-					XMotor2 = 0;
 				}
-				if (XMotor2 > (w - 5))
+				else if (XMotor2 == lijn[0][i] && YMotor2 == lijn[1][i])
 				{
 					alive2 = 0;
-					XMotor2 = 230;
 				}
-				if (YMotor2 > (h - 3))
-				{
-					alive2 = 0;
-					YMotor2 = 310;
-				}
-				if (YMotor2 < 0)
-				{
-					alive2 = 0;
-					YMotor2 = 0;
-				}
-				for (int i = 0; i < lijn2[0][teller2]; i++)
-				{
-					if (XMotor2 == lijn2[0][i] && YMotor2 == lijn2[1][i])
-					{
-						alive2 = 0;
-					} else if (XMotor2 == lijn[0][i] && YMotor2 == lijn[1][i])
-					{
-						alive2 = 0;
-					}
-				}
-			
+			}
 		}
 		if (!alive)
 		{
@@ -620,9 +654,9 @@ void game()
 		}
 	}
 	change_score(score);
-	//write score to avr eeprom
-	eeprom_write_byte((uint8_t*)0, score);
-	eeprom_write_byte((uint8_t*)1, score2);
+	// write score to avr eeprom
+	eeprom_write_byte((uint8_t *)0, score);
+	eeprom_write_byte((uint8_t *)1, score2);
 
 	// create game over screen
 	tft.fillScreen(ILI9341_BLACK);
@@ -636,30 +670,30 @@ void game()
 	// wait for button press
 	while (1)
 	{
-        // timer
-        TCNT0 = 0;
-        while (TCNT0 < 250)
-        {
-            // do nothing
-        }
+		// timer
+		TCNT0 = 0;
+		while (TCNT0 < 250)
+		{
+			// do nothing
+		}
 		while (Nunchuk.getState(NUNCHUK_ADDRESS))
 		{
-            // timer
-            TCNT0 = 0;
-            while (TCNT0 < 250)
-            {
-                // do nothing
-            }
+			// timer
+			TCNT0 = 0;
+			while (TCNT0 < 250)
+			{
+				// do nothing
+			}
 			if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 			{
 				while (Nunchuk.getState(NUNCHUK_ADDRESS))
 				{
-                // timer
-                TCNT0 = 0;
-                while (TCNT0 < 250)
-                {
-                    // do nothing
-                }
+					// timer
+					TCNT0 = 0;
+					while (TCNT0 < 250)
+					{
+						// do nothing
+					}
 					if (Nunchuk.state.z_button == 0 && Nunchuk.state.c_button == 0)
 					{
 						menu();
@@ -676,16 +710,16 @@ void highscores()
 	tft.setTextColor(ILI9341_WHITE);
 	tft.setTextSize(3);
 	tft.println("Highscores");
-	//read score from avr eeprom
-	int8_t score = eeprom_read_byte((uint8_t*)0);
-	int8_t score2 = eeprom_read_byte((uint8_t*)1);
-	//show score of player 1
+	// read score from avr eeprom
+	int8_t score = eeprom_read_byte((uint8_t *)0);
+	int8_t score2 = eeprom_read_byte((uint8_t *)1);
+	// show score of player 1
 	tft.setCursor(0, 50);
 	tft.setTextSize(2);
 	tft.println("Player 1: ");
 	tft.setCursor(120, 50);
 	tft.print(score);
-	//show score of player 2
+	// show score of player 2
 	tft.setCursor(0, 100);
 	tft.setTextSize(2);
 	tft.println("Player 2: ");
@@ -698,12 +732,12 @@ void highscores()
 	// wait for button press
 	while (1)
 	{
-        // timer
-        TCNT0 = 0;
-        while (TCNT0 < 250)
-        {
-            // do nothing
-        }
+		// timer
+		TCNT0 = 0;
+		while (TCNT0 < 250)
+		{
+			// do nothing
+		}
 		while (Nunchuk.getState(NUNCHUK_ADDRESS))
 		{
 			if (Nunchuk.state.z_button == 0 && Nunchuk.state.c_button == 0)
@@ -720,8 +754,9 @@ void highscores()
 	}
 }
 
-void settings(){
-	//screen to select color of the player
+void settings()
+{
+	// screen to select color of the player
 	tft.fillScreen(ILI9341_BLACK);
 	tft.setCursor(0, 0);
 	tft.setTextColor(ILI9341_WHITE);
@@ -730,10 +765,10 @@ void settings(){
 	tft.setCursor(0, 50);
 	tft.setTextSize(2);
 	tft.println("Press C & Z to select");
-	//for loop to show all colors
-	for (int i = 0; i < (sizeof(colors)/2); i++)
+	// for loop to show all colors
+	for (int i = 0; i < (sizeof(colors) / 2); i++)
 	{
-		tft.setCursor(50, 108+(i*18));
+		tft.setCursor(50, 108 + (i * 18));
 		tft.setTextColor(colors[i]);
 		tft.println("select color");
 	}
@@ -769,7 +804,7 @@ void settings(){
 			}
 		}
 		// move triangle down
-		else if (Nunchuk.state.joy_y_axis == 00 && player_color != (sizeof(colors)/2)-1)
+		else if (Nunchuk.state.joy_y_axis == 00 && player_color != (sizeof(colors) / 2) - 1)
 		{
 			tft.fillTriangle(0, 100 + (player_color * 18), 0, 130 + (player_color * 18), 20, 115 + (player_color * 18), ILI9341_BLACK);
 			player_color++;
@@ -814,7 +849,7 @@ void stop() // stop met verzenden
 {
 	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
 }
-//create deleta ram function
+// create deleta ram function
 int freeRam()
 {
 	extern int __heap_start, *__brkval;
@@ -822,63 +857,68 @@ int freeRam()
 	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }
 
-void convertArray(){
-    if (fullbit)
-    {
-        for (uint16_t i = 0; i < (sizeof(pulsearray)/2); i++)
-        {
-            if (pulsearray[i] >= minzeropulse && pulsearray[i] <= maxzeropulse)
-            {
-                bitarray[i] = 0;
-            }   else if(pulsearray[i] >= minonepulse && pulsearray[i] <= maxonepulse)
-            {
-                bitarray[i] = 1;
-            }
-            pulsearray[i] = 0;
-        }
-        Serial.println();
-        if ((sizeof(bitarray)/2) == 16)
-        {
-            validbit = true;
-        }
-    }
+void convertArray()
+{
+	if (fullbit)
+	{
+		for (uint16_t i = 0; i < (sizeof(pulsearray) / 2); i++)
+		{
+			if (pulsearray[i] >= minzeropulse && pulsearray[i] <= maxzeropulse)
+			{
+				bitarray[i] = 0;
+			}
+			else if (pulsearray[i] >= minonepulse && pulsearray[i] <= maxonepulse)
+			{
+				bitarray[i] = 1;
+			}
+			pulsearray[i] = 0;
+		}
+		Serial.println();
+		if ((sizeof(bitarray) / 2) == 16)
+		{
+			validbit = true;
+		}
+	}
 }
 
-int compareArray(uint16_t arr1[], const uint16_t arr2[], int size){
-    for (int i = 0; i < size; i++) {
-        if (arr1[i] != arr2[i]) {
-            return 0;
-        }
-    }
-    return 1;
+int compareArray(uint16_t arr1[], const uint16_t arr2[], int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		if (arr1[i] != arr2[i])
+		{
+			return 0;
+		}
+	}
+	return 1;
 }
 
 void compareBit()
 {
 	if (validbit)
 	{
-		if (compareArray(bitarray,topbit,16))
+		if (compareArray(bitarray, topbit, 16))
 		{
 			top = true;
 			bottom = false;
 			right = false;
 			left = false;
 		}
-		else if(compareArray(bitarray,bottombit,16))
+		else if (compareArray(bitarray, bottombit, 16))
 		{
 			top = false;
 			bottom = true;
 			right = false;
 			left = false;
 		}
-		else if(compareArray(bitarray,rightbit,16))
+		else if (compareArray(bitarray, rightbit, 16))
 		{
 			top = false;
 			bottom = false;
 			right = true;
 			left = false;
 		}
-		else if(compareArray(bitarray,leftbit,16))
+		else if (compareArray(bitarray, leftbit, 16))
 		{
 			top = false;
 			bottom = false;
@@ -887,4 +927,232 @@ void compareBit()
 		}
 		validbit = false;
 	}
+}
+
+void timer(uint16_t microseconds)
+{
+	// timer for delays
+	microseconds = (microseconds / 64);
+
+	TCNT2 = 0;
+	while (TCNT2 < microseconds)
+	{
+		// doe niks
+	}
+}
+
+void pulseIR(long microsecs)
+{
+
+	cli();
+
+	if (is38khz)
+	{
+		while (microsecs > 0)
+		{
+			// 38 kHz
+			PORTD |= (1 << IRledPin); // duurt 3 microseconds
+			timer(10);
+			PORTD &= ~(1 << IRledPin); // duurt 3 microseconds
+			timer(10);
+			// niet aankomen
+			microsecs -= 26;
+		}
+	}
+	else if (!is38khz)
+	{
+		while (microsecs > 0)
+		{
+			// 56 kHz
+			PORTD |= (1 << IRledPin); // duurt 3 microseconds
+			timer(6);
+			PORTD &= ~(1 << IRledPin);
+			timer(6);
+			// niet aankomen
+			microsecs -= 26;
+		}
+	}
+	sei();
+}
+
+void SendLeftCode()
+{
+	// startbit
+	pulseIR(9200);
+	timer(1500);
+
+	// Data
+
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+}
+
+void SendRightCode()
+{
+	// startbit
+	pulseIR(9200);
+	timer(1500);
+
+	// Data
+
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+}
+
+void SendBottomCode()
+{
+
+	// startbit
+	pulseIR(9200);
+	timer(1500);
+
+	// Data
+
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+}
+
+void SendTopCode()
+{
+
+	// startbit
+	pulseIR(9200);
+	timer(1500);
+
+	// Data
+
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+}
+void clearArrays() {
+  for (int i = 0; i < 64; i++) {
+    lijn[0][i] = 0;
+    lijn[1][i] = 0;
+    lijn2[0][i] = 0;
+    lijn2[1][i] = 0;
+  }
 }
