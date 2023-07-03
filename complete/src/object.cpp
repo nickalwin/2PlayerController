@@ -104,7 +104,6 @@ void compareBit();
 void printbit();
 void convertArray();
 int freeRam();
-void clearArrays();
 
 const unsigned char SLAVE_ADDRESS = 0x42;
 void init_twi();
@@ -358,8 +357,6 @@ void game()
 
 		richting = 1;
 		richting2 = 0;
-
-		clearArrays();
 
 		change_score(score);
 
