@@ -35,6 +35,7 @@ volatile bool top = false;
 volatile bool right = false;
 volatile bool left = false;
 volatile bool bottom = false;
+volatile bool startgamebit = false;
 
 uint16_t pulsearray[17];
 
@@ -44,9 +45,20 @@ const uint16_t topbit[]{1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1};
 const uint16_t bottombit[]{0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0};
 const uint16_t rightbit[]{0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1};
 const uint16_t leftbit[]{1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0};
+const uint16_t acceptbit[]{1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1};
 
 uint8_t lijn[2][64];
 uint8_t lijn2[2][64];
+uint8_t alive;
+uint16_t XMotor;
+uint16_t YMotor;
+uint8_t teller;
+uint8_t alive2;
+uint16_t XMotor2;
+uint16_t YMotor2;
+uint8_t teller2;
+uint8_t richting;
+uint8_t richting2;
 
 uint16_t pulseir;
 uint16_t zerotimer;
@@ -60,6 +72,7 @@ void SendLeftCode();
 void SendBottomCode();
 void SendTopCode();
 void sendTestCode();
+void sendAcceptCode();
 
 int compareArray(int arr1[], int arr2[], int size);
 
@@ -212,7 +225,6 @@ int main(int argc, char const *argv[])
 		minonepulse = 12;
 		maxonepulse = 17;
 	}
-
 	menu();
 }
 
@@ -264,7 +276,30 @@ void menu()
 		if (Nunchuk.state.z_button == 1 && Nunchuk.state.c_button == 1)
 		{
 			if (option == 0)
+			{
+
+			//luisteren voor acceptatiebit
+			if(is38khz){
+				while (startgamebit == false)
+				{
+					convertArray();
+					compareBit();
+				}
+				startgamebit = false;
+				sendAcceptCode();
 				game();
+			}
+			if(!is38khz){
+				sendAcceptCode();
+				while (startgamebit == false)
+				{
+					convertArray();
+					compareBit();
+				}
+				startgamebit = false;
+				game();
+			}
+			}
 			if (option == 1)
 				highscores();
 			if (option == 2)
@@ -309,24 +344,20 @@ void game()
 	// free ram of heap
 	freeRam();
 	score = 0;
+	score2 = 0;
 	while (score < 5 && score2 < 5)
 	{
-		uint8_t alive = 1;
-		uint16_t XMotor = 50;
-		uint16_t YMotor = 50;
+		alive = 1;
+		XMotor = 50;
+		YMotor = 50;
+		teller = 0;
+		alive2 = 1;
+		XMotor2 = 100;
+		YMotor2 = 100;
+		teller2 = 0;
 
-		uint8_t lijn[2][64];
-		uint8_t teller = 0;
-
-		uint8_t alive2 = 1;
-		uint16_t XMotor2 = 100;
-		uint16_t YMotor2 = 100;
-
-		uint8_t lijn2[2][64];
-		uint8_t teller2 = 0;
-
-		uint8_t richting = 1;
-		uint8_t richting2 = 0;
+		richting = 1;
+		richting2 = 0;
 
 		clearArrays();
 
@@ -336,18 +367,6 @@ void game()
 		tft.drawRoundRect(0, 0, w, h, 5, ILI9341_WHITE); // draw border
 		while (alive && alive2)
 		{
-
-			// if (fullbit)
-			// {
-			//     for (uint16_t i = 0; i < (sizeof(pulsearray)/2); i++)
-			//     {
-			//         Serial.print(pulsearray[i]);
-			//         Serial.print(',');
-			//         pulsearray[i] = 0;
-			//     }
-			//     fullbit = false;
-			//     Serial.println("");
-			// }
 
 			convertArray();
 			compareBit();
@@ -647,10 +666,26 @@ void game()
 		if (!alive)
 		{
 			score++;
+			Serial.println("dood 1:");
+			for (int i = 0; i < 64; i++)
+			{
+				lijn[0][i] = 0;
+				lijn[1][i] = 0;
+				lijn2[0][i] = 0;
+				lijn2[1][i] = 0;
+			}	
 		}
 		if (!alive2)
 		{
 			score2++;
+			Serial.println("dood 2:");
+			for (int i = 0; i < 64; i++)
+			{
+				lijn[0][i] = 0;
+				lijn[1][i] = 0;
+				lijn2[0][i] = 0;
+				lijn2[1][i] = 0;
+			}
 		}
 	}
 	change_score(score);
@@ -925,6 +960,10 @@ void compareBit()
 			right = false;
 			left = true;
 		}
+		else if (compareArray(bitarray, acceptbit, 16))
+		{
+			startgamebit = true;
+		}
 		validbit = false;
 	}
 }
@@ -1148,11 +1187,47 @@ void SendTopCode()
 	timer(onetimer); // 1
 	pulseIR(pulseir);
 }
-void clearArrays() {
-  for (int i = 0; i < 64; i++) {
-    lijn[0][i] = 0;
-    lijn[1][i] = 0;
-    lijn2[0][i] = 0;
-    lijn2[1][i] = 0;
-  }
+
+void sendAcceptCode()
+{
+
+	// startbit
+	pulseIR(9200);
+	timer(1500);
+
+	// Data
+
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
+	timer(zerotimer); // 0
+	pulseIR(pulseir);
+	timer(onetimer); // 1
+	pulseIR(pulseir);
 }
